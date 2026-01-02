@@ -1,73 +1,15 @@
-// src/pages/SignIn.jsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FormInput } from '../components/FormInput';
-import '../styles/auth/main.scss';
+import { FormInput } from '../../components/FormInput';
+import '../../styles/auth/main.scss';
+import useSignIn from './useSignIn';
 
 const SignIn = () => {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-    
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: '',
-      }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    let isValid = true;
-
-    if (!formData.email) {
-      newErrors.email = 'Email is required';
-      isValid = false;
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email is invalid';
-      isValid = false;
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'Password is required';
-      isValid = false;
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
-      isValid = false;
-    }
-
-    setErrors(newErrors);
-    return isValid;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Signing in with:', formData);
-      setIsLoading(false);
-      // navigate('/dashboard');
-    }, 1000);
-  };
+  const {
+    formData,
+    errors,
+    isLoading,
+    handleChange,
+    handleSubmit
+  } = useSignIn();
 
   return (
     <div className="auth__container">
@@ -103,11 +45,11 @@ const SignIn = () => {
             />
             <div className="auth__group" style={{ textAlign: 'right' }}>
               <a href="/forgot-password" className="auth__link">
-                Forgot password?
+                Forgot password? 
               </a>
             </div>
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="auth__button auth__button--primary"
               disabled={isLoading}
             >
