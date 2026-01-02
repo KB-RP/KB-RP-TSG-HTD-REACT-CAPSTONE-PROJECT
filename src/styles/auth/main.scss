@@ -1,0 +1,143 @@
+// src/styles/auth/main.scss
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// Rest of your styles...
+
+.auth {
+  &__container {
+    display: flex;
+    min-height: 100vh;
+    background-color: $background;
+  }
+
+  &__left {
+    flex: 1;
+    background: linear-gradient(
+      135deg, 
+      $primary 0%, 
+      color.adjust($primary, $lightness: 10%) 100%
+    );
+    @include flex-center;
+    flex-direction: column;
+    padding: 2rem;
+    color: $white;
+    text-align: center;
+  }
+
+
+  &__right {
+    flex: 1;
+    @include flex-center;
+    padding: 2rem;
+  }
+
+  &__form {
+    width: 100%;
+    max-width: 400px;
+    background: $white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: $shadow;
+
+    &-title {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      color: $text;
+      text-align: center;
+    }
+  }
+
+  &__group {
+    margin-bottom: 1.25rem;
+
+    &--inline {
+      display: flex;
+      gap: 1rem;
+    }
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: $text;
+
+    &--required::after {
+      content: '*';
+      margin-left: 0.25rem;
+      color: $error;
+    }
+  }
+
+  &__input {
+    @include form-input;
+  }
+
+  &__error {
+    color: $error;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  &__footer {
+    margin-top: 1.5rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: $text-light;
+  }
+
+  &__link {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &__divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background-color: $border;
+      z-index: 1;
+    }
+
+    span {
+      position: relative;
+      display: inline-block;
+      padding: 0 1rem;
+      background-color: $white;
+      z-index: 2;
+      color: $text-light;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .auth {
+    &__container {
+      flex-direction: column;
+    }
+
+    &__left {
+      padding: 4rem 2rem;
+    }
+
+    &__right {
+      padding: 2rem 1rem;
+    }
+  }
+}

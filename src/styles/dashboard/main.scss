@@ -1,0 +1,398 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'courses';
+
+// Base styles
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: $text;
+  background-color: $background;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  @include button-reset;
+}
+
+// Dashboard layout
+.dashboard {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  &__container {
+    display: flex;
+    flex: 1;
+    padding-top: 64px; // Height of navbar
+    position: relative;
+  }
+  
+  &__main {
+    flex: 1;
+    padding: $spacing-6;
+    overflow-y: auto;
+    min-height: calc(100vh - 64px);
+    
+    @include respond('md') {
+      padding: $spacing-8;
+      margin-left: 240px; // Width of sidebar
+    }
+  }
+}
+
+// Navbar styles
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background-color: $white;
+  box-shadow: $shadow-sm;
+  padding: 0 $spacing-6;
+  z-index: $z-navbar;
+  @include flex-between;
+  
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+  
+  &__menu-button {
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $rounded;
+    color: $text;
+    transition: $transition;
+    
+    &:hover {
+      background-color: $background;
+    }
+    
+    @include respond('md') {
+      display: none;
+    }
+  }
+  
+  &__logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: $primary;
+    margin: 0;
+  }
+  
+  &__search {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 $spacing-8;
+    position: relative;
+  }
+  
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-4;
+  }
+  
+  &__notification {
+    position: relative;
+    @include flex-center;
+    width: 40px;
+    height: 40px;
+    border-radius: $rounded;
+    color: $text;
+    transition: $transition;
+    
+    &:hover {
+      background-color: $background;
+    }
+    
+    &-badge {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background-color: $danger;
+      color: $white;
+      font-size: 0.625rem;
+      font-weight: 600;
+      width: 16px;
+      height: 16px;
+      border-radius: $rounded-full;
+      @include flex-center;
+    }
+  }
+  
+  .user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: $rounded-full;
+    background-color: $primary-light;
+    color: $white;
+    @include flex-center;
+    font-weight: 600;
+    cursor: pointer;
+    transition: $transition;
+    
+    &:hover {
+      background-color: $primary;
+    }
+  }
+}
+
+// Search form
+.search-form {
+  position: relative;
+  
+  &__container {
+    position: relative;
+  }
+  
+  &__icon {
+    position: absolute;
+    left: $spacing-4;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    pointer-events: none;
+  }
+  
+  &__input {
+    @include input-style;
+    padding-left: $spacing-10;
+    background-color: $background;
+    width: 100%;
+    
+    &:focus {
+      background-color: $white;
+    }
+  }
+}
+
+// Search suggestions
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + $spacing-2);
+  left: 0;
+  right: 0;
+  background: $white;
+  border-radius: $rounded;
+  box-shadow: $shadow-md;
+  z-index: $z-dropdown;
+  max-height: 300px;
+  overflow-y: auto;
+  @include custom-scrollbar;
+  
+  &__item {
+    padding: $spacing-3 $spacing-4;
+    cursor: pointer;
+    transition: $transition;
+    color: $text;
+    
+    &:hover {
+      background-color: $background;
+    }
+    
+    &--highlighted {
+      background-color: $background;
+      color: $primary;
+    }
+  }
+}
+
+// Sidebar styles
+.sidebar {
+  position: fixed;
+  top: 64px;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background-color: $white;
+  box-shadow: 1px 0 3px rgba(0, 0, 0, 0.05);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: $z-sidebar;
+  display: flex;
+  flex-direction: column;
+  
+  @include respond('md') {
+    transform: translateX(0);
+  }
+  
+  &--open {
+    transform: translateX(0);
+  }
+  
+  &-overlay {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: $z-sidebar - 1;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    
+    &--active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    @include respond('md') {
+      display: none;
+    }
+  }
+  
+  &__header {
+    padding: $spacing-6 $spacing-6 $spacing-4;
+    border-bottom: 1px solid $border;
+    
+    h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text;
+    }
+  }
+  
+  &__nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-4 0;
+    @include custom-scrollbar;
+  }
+  
+  &__footer {
+    padding: $spacing-4 $spacing-6;
+    border-top: 1px solid $border;
+  }
+}
+
+// Navigation menu
+.nav-menu {
+  list-style: none;
+  
+  &__item {
+    margin-bottom: $spacing-1;
+  }
+  
+  &__link {
+    display: flex;
+    align-items: center;
+    padding: $spacing-3 $spacing-6;
+    color: $text-light;
+    transition: $transition;
+    position: relative;
+    
+    &:hover {
+      color: $primary;
+      background-color: rgba($primary, 0.05);
+    }
+    
+    &--active {
+      color: $primary;
+      background-color: rgba($primary, 0.05);
+      font-weight: 500;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: $primary;
+        border-top-right-radius: $rounded-full;
+        border-bottom-right-radius: $rounded-full;
+      }
+    }
+  }
+  
+  &__icon {
+    margin-right: $spacing-3;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  &__label {
+    font-size: 0.9375rem;
+  }
+}
+
+// Logout button
+.logout-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-3 $spacing-6;
+  color: $text-light;
+  transition: $transition;
+  border-radius: $rounded;
+  
+  &:hover {
+    color: $danger;
+    background-color: rgba($danger, 0.05);
+  }
+  
+  &__icon {
+    margin-right: $spacing-3;
+    font-size: 1.25rem;
+  }
+  
+  span {
+    font-size: 0.9375rem;
+    font-weight: 500;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 767px) {
+  .dashboard__main {
+    margin-left: 0 !important;
+  }
+  
+  .navbar__search {
+    margin: 0 $spacing-4;
+  }
+}
+
+// Utility classes
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-6;
+  
+  @include respond('lg') {
+    padding: 0 $spacing-8;
+  }
+}
+
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
