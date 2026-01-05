@@ -1,6 +1,8 @@
 import { FormInput } from '../../components/FormInput';
+import { useAuth } from '../../contexts';
 import '../../styles/auth/main.scss';
 import useSignIn from './useSignIn';
+
 
 const SignIn = () => {
   const {
@@ -53,7 +55,7 @@ const SignIn = () => {
               className="auth__button auth__button--primary"
               disabled={isLoading}
             >
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              Sign In
             </button>
           </form>
           <div className="auth__divider">

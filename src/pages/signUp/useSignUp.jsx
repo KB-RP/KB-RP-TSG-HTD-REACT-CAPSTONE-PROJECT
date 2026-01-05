@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { authAPI } from "../../utils/api/authAPI";
 
 const useSignUp = () => {
     const navigate = useNavigate();
@@ -71,24 +72,19 @@ const useSignUp = () => {
         return isValid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) return;
 
         setIsLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            console.log("Signing up with:", {
-                firstName: formData.firstName,
-                lastName: formData.lastName,
-                email: formData.email
-            });
 
-            setIsLoading(false);
-            // navigate("/signin");
-        }, 1500);
+        const res = await authAPI.register(formData);
+
+        console.log("response=>>>>", res)
+
+        setIsLoading(false);
     };
 
     return {

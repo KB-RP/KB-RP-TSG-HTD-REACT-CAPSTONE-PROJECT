@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts";
 
 const useSignIn = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -11,10 +13,10 @@ const useSignIn = () => {
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
       [name]: value
@@ -26,6 +28,10 @@ const useSignIn = () => {
         ...prev,
         [name]: ""
       }));
+    }
+    // Clear submit error when user starts typing
+    if (submitError) {
+      setSubmitError("");
     }
   };
 
@@ -53,25 +59,31 @@ const useSignIn = () => {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSubmitError("");
 
     if (!validateForm()) return;
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Signing in with:", formData);
+    try {
+      await login(formData);
+      // No need to manually navigate here as the AuthContext will handle the redirect
+      // after successful login
+    } catch (error) {
+      console.error('Login error:', error);
+      setSubmitError(error.message || 'Login failed. Please try again.');
+    } finally {
       setIsLoading(false);
-      // navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   return {
     formData,
     errors,
     isLoading,
+    submitError,
     handleChange,
     handleSubmit
   };

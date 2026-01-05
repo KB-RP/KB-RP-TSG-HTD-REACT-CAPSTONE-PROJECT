@@ -1,0 +1,521 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+// Variables
+$primary: #6C63FF;
+$primary-dark: #5a52d3;
+$text: #2D3748;
+$text-light: #718096;
+$border: #E2E8F0;
+$bg-light: #F8FAFC;
+$success: #48BB78;
+$white: #FFFFFF;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin transition($property: all, $duration: 0.3s) {
+  transition: $property $duration ease;
+}
+
+// Base Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  color: $text;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+// Course Hero
+.course-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4rem 0;
+  margin-bottom: 3rem;
+
+  &__content {
+    max-width: 800px;
+    
+    .course-category {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .course-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    .course-subtitle {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+      max-width: 90%;
+    }
+  }
+}
+
+// Course Meta
+.course-meta {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+
+  .meta-item {
+    @include flex-center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+
+    .meta-icon {
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+// Course Layout
+.course-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  margin: 2rem 0;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Tabs
+.course-tabs {
+  display: flex;
+  border-bottom: 1px solid $border;
+  margin-bottom: 2rem;
+
+  .tab-btn {
+    padding: 1rem 1.5rem;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: $text-light;
+    cursor: pointer;
+    position: relative;
+    @include transition;
+
+    &:hover {
+      color: $primary;
+    }
+
+    &.active {
+      color: $primary;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: $primary;
+        border-radius: 3px 3px 0 0;
+      }
+    }
+  }
+}
+
+// Course Overview
+.learning-objectives {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0 3rem;
+
+  .objective-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+
+    .objective-icon {
+      color: $primary;
+      margin-top: 0.25rem;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Course Preview
+.course-preview {
+  background: $bg-light;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 2rem 0;
+
+  .preview-module {
+    padding: 1.5rem;
+    border-bottom: 1px solid $border;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: $text;
+    }
+  }
+
+  .preview-lessons {
+    .preview-lesson {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0;
+      color: $text-light;
+      font-size: 0.95rem;
+
+      .play-icon {
+        color: $primary;
+        margin-right: 1rem;
+        font-size: 0.8rem;
+      }
+
+      .preview-badge {
+        background: rgba($primary, 0.1);
+        color: $primary;
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        margin-left: auto;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .view-all-btn {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    text-align: center;
+    background: $white;
+    border: 1px solid $border;
+    color: $primary;
+    font-weight: 600;
+    cursor: pointer;
+    @include transition;
+
+    &:hover {
+      background: $bg-light;
+    }
+  }
+}
+
+// Course Sidebar
+.course-sidebar {
+  position: relative;
+
+  .course-card {
+    background: $white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .course-preview {
+    position: relative;
+    padding-top: 56.25%; // 16:9 aspect ratio
+    background: #000;
+
+    .course-thumbnail {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      @include transition;
+    }
+
+    .preview-btn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.9);
+      color: $text;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      @include transition;
+
+      &:hover {
+        background: $white;
+        transform: translate(-50%, -50%) scale(1.05);
+      }
+    }
+
+    &:hover .course-thumbnail {
+      opacity: 0.6;
+    }
+  }
+
+  .pricing {
+    padding: 1.5rem;
+    border-bottom: 1px solid $border;
+
+    .price {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $text;
+      margin-bottom: 1rem;
+
+      .original-price {
+        font-size: 1rem;
+        color: $text-light;
+        text-decoration: line-through;
+        margin-left: 0.5rem;
+      }
+    }
+
+    .enroll-btn {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      background: $primary;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      @include transition;
+
+      &:hover {
+        background: $primary-dark;
+      }
+
+      &:disabled {
+        background: $text-light;
+        cursor: not-allowed;
+      }
+
+      &.enrolled {
+        background: $success;
+
+        &:hover {
+          background: darken($success, 5%);
+        }
+      }
+    }
+  }
+
+  .course-features {
+    padding: 1.5rem;
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      color: $text;
+      font-size: 0.95rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .feature-icon {
+        color: $primary;
+      }
+    }
+  }
+}
+
+// Curriculum
+.course-curriculum {
+  .module {
+    background: $white;
+    border: 1px solid $border;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+
+    .module-header {
+      padding: 1.25rem 1.5rem;
+      background: $bg-light;
+      border-bottom: 1px solid $border;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: $text;
+      }
+
+      span {
+        font-size: 0.9rem;
+        color: $text-light;
+      }
+    }
+
+    .lessons-list {
+      .lesson-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid $border;
+        @include transition;
+
+        &:hover {
+          background: $bg-light;
+        }
+
+        .lesson-info {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+
+          .lesson-icon {
+            color: $text-light;
+            font-size: 0.8rem;
+          }
+
+          .lesson-title {
+            color: $text;
+          }
+
+          .preview-badge {
+            background: rgba($primary, 0.1);
+            color: $primary;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            font-weight: 500;
+          }
+        }
+
+        .lesson-duration {
+          color: $text-light;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+// Reviews
+.course-reviews {
+  .reviews-header {
+    background: $bg-light;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+
+    .rating-overview {
+      .rating-number {
+        font-size: 3.5rem;
+        font-weight: 700;
+        color: $text;
+        line-height: 1;
+        margin-bottom: 0.5rem;
+      }
+
+      .rating-stars {
+        display: flex;
+        justify-content: center;
+        gap: 0.25rem;
+        margin-bottom: 0.5rem;
+
+        .star {
+          color: #E2E8F0;
+          font-size: 1.25rem;
+
+          &.active {
+            color: #F6E05E;
+          }
+        }
+      }
+
+      .rating-count {
+        color: $text-light;
+        font-size: 0.95rem;
+      }
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .course-hero {
+    padding: 2.5rem 0;
+
+    &__content {
+      .course-title {
+        font-size: 2rem;
+      }
+
+      .course-subtitle {
+        font-size: 1.1rem;
+      }
+    }
+  }
+
+  .course-meta {
+    gap: 1rem;
+    
+    .meta-item {
+      font-size: 0.875rem;
+    }
+  }
+
+  .learning-objectives {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Loading and Error States
+.course-loading,
+.course-error {
+  text-align: center;
+  padding: 4rem 1rem;
+  font-size: 1.1rem;
+}
+
+.course-error {
+  color: #E53E3E;
+}

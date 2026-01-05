@@ -1,5 +1,6 @@
 // src/components/course/CourseCard.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const CourseCard = ({
   id,
@@ -13,6 +14,16 @@ const CourseCard = ({
   category,
   onClick,
 }) => {
+  const navigate = useNavigate();
+
+  const handleViewDetails = (e) => {
+    e.stopPropagation(); // Prevent triggering the parent's onClick
+    if (onClick) {
+      onClick(e);
+    } else {
+      navigate(`/courses/${id}`);
+    }
+  };
   return (
     <article className="course-card" onClick={onClick} role="button" tabIndex={0}>
       <div className="course-card__image">
@@ -50,7 +61,11 @@ const CourseCard = ({
           <div className="course-card__price">
             {price === 0 || price === '0' ? 'Free' : `$${Number(price).toFixed(2)}`}
           </div>
-          <button className="course-card__button" type="button">
+          <button 
+            className="course-card__button" 
+            type="button"
+            onClick={handleViewDetails}
+          >
             View details
           </button>
         </footer>
