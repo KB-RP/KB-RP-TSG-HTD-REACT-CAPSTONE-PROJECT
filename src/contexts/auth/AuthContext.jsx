@@ -10,22 +10,26 @@ export const AuthProvider = ({ children }) => {
 
   // Check if user is logged in on initial load
   useEffect(() => {
-    const checkAuth = async () => {
+    const loadAuthState = () => {
       try {
+        const storedUser = localStorage.getItem('user');
         const token = localStorage.getItem('token');
-        if (token) {
-          const userData = await authAPI.getProfile();
-          setUser(userData);
+        
+        if (token && storedUser) {
+          setUser(JSON.parse(storedUser));
+          // Set the token in your API client if needed
+          // authAPI.setAuthToken(token);
         }
       } catch (err) {
-        console.error('Auth check failed:', err);
+        console.error('Failed to load auth state:', err);
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
       } finally {
         setLoading(false);
       }
     };
 
-    checkAuth();
+    loadAuthState();
   }, []);
 
   const login = async (credentials) => {
@@ -33,6 +37,11 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       setError(null);
       const userData = await authAPI.login(credentials);
+      
+      // Store the token and user data in localStorage
+      localStorage.setItem('token', userData.accessToken);
+      localStorage.setItem('user', JSON.stringify(userData.user));
+      setUser(userData.user);
       setUser(userData.user || userData);
       return userData;
     } catch (err) {
@@ -43,15 +52,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = async () => {
-    try {
-      await authAPI.logout();
-    } catch (err) {
-      console.error('Logout error:', err);
-    } finally {
-      setUser(null);
-      localStorage.removeItem('token');
-    }
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   const register = async (userData) => {

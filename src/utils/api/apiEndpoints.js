@@ -17,5 +17,6 @@ export const USERS = {
 // Example of how to add more API endpoints
 export const COURSES = {
   getCourse: `${API_BASE}/courses`,
+  enrollInCourse : `${API_BASE}/enrollments`,
   // Add more course-related endpoints here
 };

@@ -1,9 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts';
-import Dashboard from './pages/Dashboard';
 import SignIn from './pages/signIn';
 import SignUp from './pages/signUp';
-import CourseDetail from './pages/CourseDetail';
+import CourseDetail from './pages/courseDetail';
+import DashboardHome from './pages/dashboard';
+import MyCourses from './pages/myCourses';
+import AdminSettings from './pages/adminSettings';
+import { AdminRoute } from './components/common/adminRoute';
+import Layout from './pages/layout';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -37,7 +41,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Navigate to="/signin" replace />} />
-          
+
           {/* Public Routes */}
           <Route element={<PublicRoute />}>
             <Route path="/signin" element={<SignIn />} />
@@ -46,7 +50,19 @@ function App() {
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard/*" element={<Dashboard />} />
+            <Route path="/dashboard" element={<Layout/>}>
+              <Route index element={<DashboardHome />} />
+              <Route path="my-course" element={<MyCourses />} />
+              <Route
+                path="admin-settings"
+                element={
+                  <AdminRoute>
+                    <AdminSettings />
+                  </AdminRoute>
+                }
+              />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            </Route>
             <Route path="/courses/:id" element={<CourseDetail />} />
           </Route>
 

@@ -7,6 +7,7 @@ import './CourseDetail.scss';
 
 const CourseDetail = () => {
   const { id } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const [course, setCourse] = useState(null);
@@ -32,12 +33,13 @@ const CourseDetail = () => {
     }
   }, [id]);
 
-  const handleEnroll = () => {
-    if (!isAuthenticated) {
-      navigate('/signin', { state: { from: `/courses/${id}` } });
-      return;
-    }
+  const handleEnroll = async () => {
+    // if (!isAuthenticated) {
+    //   navigate('/signin', { state: { from: `/courses/${id}` } });
+    //   return;
+    // }
     // Implement enrollment logic
+   const res = await courseAPI.enrollInCourse({ userId: user?.id, courseId: id });
     setIsEnrolled(true);
   };
 

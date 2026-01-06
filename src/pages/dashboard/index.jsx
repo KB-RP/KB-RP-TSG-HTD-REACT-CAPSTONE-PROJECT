@@ -1,6 +1,6 @@
 // src/pages/dashboard/Home.jsx
 import React, { useEffect, useState } from 'react';
-import CourseCard from '../../components/course/CourseCard';
+import CourseCard from '../../components/course/courseCard';
 import { courseAPI } from '../../utils/api/courseApi';
 
 const DashboardHome = () => {

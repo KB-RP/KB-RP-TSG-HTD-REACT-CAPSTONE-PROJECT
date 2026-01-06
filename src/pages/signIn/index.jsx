@@ -1,4 +1,4 @@
-import { FormInput } from '../../components/FormInput';
+import { FormInput } from '../../components/formInput';
 import { useAuth } from '../../contexts';
 import '../../styles/auth/main.scss';
 import useSignIn from './useSignIn';

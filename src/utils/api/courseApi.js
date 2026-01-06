@@ -23,4 +23,27 @@ export const courseAPI = {
             throw error.response?.data || error.message;
         }
     },
+
+
+    enrollInCourse: async (payload) => {
+        try {
+            const response = await apiClient.post(COURSES.enrollInCourse, payload);
+            if (response.data) {
+                return response.data;
+            }
+        } catch (error) {
+            throw error.response?.data || error.message;
+        }
+    },
+
+    getEnrolledCourse: async (id) => {
+        try {
+            const response = await apiClient.get(`${COURSES.enrollInCourse}?userId=${id}&_expand=course`);
+            if (response.data) {
+                return response.data;
+            }
+        } catch (error) {
+            throw error.response?.data || error.message;
+        }
+    },
 };

@@ -10,15 +10,19 @@ import {
   FiChevronLeft,
   FiMenu
 } from 'react-icons/fi';
+import { useAuth } from '../../contexts';
 
 const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => {
   const location = useLocation();
-  
+  const { logout , user } = useAuth();
   const navItems = [
     { icon: <FiHome />, label: 'Dashboard', path: '/dashboard' },
-    { icon: <FiBookOpen />, label: 'My Courses', path: '/dashboard/courses' },
+    { icon: <FiBookOpen />, label: 'My Courses', path: '/dashboard/my-course' },
     { icon: <FiAward />, label: 'Achievements', path: '/dashboard/achievements' },
-    { icon: <FiSettings />, label: 'Settings', path: '/dashboard/settings' },
+    ...(user?.role === 'admin' 
+      ? [{ icon: <FiSettings />, label: 'Settings', path: '/dashboard/admin-settings' }]
+      : []
+    ),
     { icon: <FiHelpCircle />, label: 'Help', path: '/help' },
   ];
 
@@ -79,7 +83,7 @@ const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => 
         <div className="sidebar__footer">
           <button 
             className="logout-button" 
-            onClick={handleNavClick}
+            onClick={()=>logout()}
             title={collapsed ? 'Logout' : ''}
           >
             <FiLogOut className="logout-button__icon" />
