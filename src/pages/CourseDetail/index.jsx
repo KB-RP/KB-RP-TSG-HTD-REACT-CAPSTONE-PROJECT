@@ -32,9 +32,6 @@ const CourseDetail = () => {
     }
   }, [id]);
 
-
-  console.log("course", )
-
   const handleEnroll = () => {
     if (!isAuthenticated) {
       navigate('/signin', { state: { from: `/courses/${id}` } });

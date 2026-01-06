@@ -3,6 +3,19 @@
 @use 'mixins' as *;
 @use 'courses';
 
+// Add the respond mixin if it doesn't exist in _mixins.scss
+@mixin respond($breakpoint) {
+  @if $breakpoint == 'md' {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $breakpoint == 'lg' {
+    @media (min-width: 1024px) {
+      @content;
+    }
+  }
+}
+
 // Base styles
 *,
 *::before,
@@ -36,11 +49,20 @@ button {
   display: flex;
   flex-direction: column;
   
-  &__container {
+   &__container {
     display: flex;
     flex: 1;
     padding-top: 64px; // Height of navbar
     position: relative;
+    transition: padding-left 0.3s ease;
+    
+    @include respond('md') {
+      padding-left: 0px; // Default sidebar width
+      
+      &.collapsed {
+        padding-left: 80px; // Collapsed sidebar width
+      }
+    }
   }
   
   &__main {
@@ -48,13 +70,21 @@ button {
     padding: $spacing-6;
     overflow-y: auto;
     min-height: calc(100vh - 64px);
+    transition: margin-left 0.3s ease;
     
     @include respond('md') {
       padding: $spacing-8;
-      margin-left: 240px; // Width of sidebar
+      margin-left: 280px; // Default sidebar width
+      
+      &.collapsed {
+        margin-left: 80px; // Collapsed sidebar width
+      }
     }
   }
 }
+
+
+
 
 // Navbar styles
 .navbar {
@@ -68,11 +98,24 @@ button {
   padding: 0 $spacing-6;
   z-index: $z-navbar;
   @include flex-between;
+  transition: left 0.3s ease;
   
+  // When sidebar is collapsed on desktop
+  @include respond('md') {
+    left: 0px; // Default sidebar width
+    right: 0;
+    width: auto;
+    
+    .collapsed-sidebar & {
+      left: 0px; // Collapsed sidebar width
+    }
+  }
+
   &__left {
     display: flex;
     align-items: center;
     gap: $spacing-4;
+    
   }
   
   &__menu-button {
@@ -88,7 +131,7 @@ button {
     }
     
     @include respond('md') {
-      display: none;
+      display: none; // Hide on desktop when sidebar is visible
     }
   }
   
@@ -97,6 +140,14 @@ button {
     font-weight: 700;
     color: $primary;
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    
+    @include respond('md') {
+      max-width: 180px;
+    }
   }
   
   &__search {
@@ -104,6 +155,10 @@ button {
     max-width: 600px;
     margin: 0 $spacing-8;
     position: relative;
+    
+    @include respond('md') {
+      margin: 0 $spacing-6;
+    }
   }
   
   &__right {
@@ -150,6 +205,7 @@ button {
     font-weight: 600;
     cursor: pointer;
     transition: $transition;
+    flex-shrink: 0;
     
     &:hover {
       background-color: $primary;
@@ -157,65 +213,8 @@ button {
   }
 }
 
-// Search form
-.search-form {
-  position: relative;
-  
-  &__container {
-    position: relative;
-  }
-  
-  &__icon {
-    position: absolute;
-    left: $spacing-4;
-    top: 50%;
-    transform: translateY(-50%);
-    color: $text-light;
-    pointer-events: none;
-  }
-  
-  &__input {
-    @include input-style;
-    padding-left: $spacing-10;
-    background-color: $background;
-    width: 100%;
-    
-    &:focus {
-      background-color: $white;
-    }
-  }
-}
-
-// Search suggestions
-.search-suggestions {
-  position: absolute;
-  top: calc(100% + $spacing-2);
-  left: 0;
-  right: 0;
-  background: $white;
-  border-radius: $rounded;
-  box-shadow: $shadow-md;
-  z-index: $z-dropdown;
-  max-height: 300px;
-  overflow-y: auto;
-  @include custom-scrollbar;
-  
-  &__item {
-    padding: $spacing-3 $spacing-4;
-    cursor: pointer;
-    transition: $transition;
-    color: $text;
-    
-    &:hover {
-      background-color: $background;
-    }
-    
-    &--highlighted {
-      background-color: $background;
-      color: $primary;
-    }
-  }
-}
+// Rest of your existing SCSS...
+// [Previous SCSS content remains the same until the .sidebar section]
 
 // Sidebar styles
 .sidebar {
@@ -223,14 +222,15 @@ button {
   top: 64px;
   left: 0;
   bottom: 0;
-  width: 280px;
+  width: 280px; // Default width
   background-color: $white;
   box-shadow: 1px 0 3px rgba(0, 0, 0, 0.05);
   transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
+  transition: all 0.3s ease;
   z-index: $z-sidebar;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   
   @include respond('md') {
     transform: translateX(0);
@@ -238,6 +238,54 @@ button {
   
   &--open {
     transform: translateX(0);
+  }
+  
+  // Collapsed state
+  &--collapsed {
+    width: 80px;
+    
+    .sidebar__header {
+      justify-content: center;
+      padding: $spacing-4;
+      
+      h2 {
+        display: none;
+      }
+    }
+    
+    .nav-menu {
+      &__label {
+        display: none;
+      }
+      
+      &__icon {
+        margin-right: 0;
+        font-size: 1.5rem;
+      }
+      
+      &__link {
+        justify-content: center;
+        padding: $spacing-3 0;
+        
+        &--active::before {
+          width: 3px;
+        }
+      }
+    }
+    
+    .logout-button {
+      justify-content: center;
+      padding: $spacing-3 0;
+      
+      span {
+        display: none;
+      }
+      
+      &__icon {
+        margin-right: 0;
+        font-size: 1.5rem;
+      }
+    }
   }
   
   &-overlay {
@@ -250,7 +298,7 @@ button {
     z-index: $z-sidebar - 1;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
     
     &--active {
       opacity: 1;
@@ -265,10 +313,37 @@ button {
   &__header {
     padding: $spacing-6 $spacing-6 $spacing-4;
     border-bottom: 1px solid $border;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 64px;
     
     h2 {
       font-size: 1.25rem;
       font-weight: 600;
+      color: $text;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  &__toggle {
+    background: none;
+    border: none;
+    color: $text-light;
+    cursor: pointer;
+    padding: $spacing-1;
+    border-radius: $rounded;
+    transition: all 0.2s ease;
+    display: none;
+    
+    @include respond('md') {
+      display: block;
+    }
+    
+    &:hover {
+      background-color: $background;
       color: $text;
     }
   }
@@ -281,7 +356,7 @@ button {
   }
   
   &__footer {
-    padding: $spacing-4 $spacing-6;
+    padding: $spacing-4;
     border-top: 1px solid $border;
   }
 }
@@ -301,6 +376,7 @@ button {
     color: $text-light;
     transition: $transition;
     position: relative;
+    white-space: nowrap;
     
     &:hover {
       color: $primary;
@@ -331,10 +407,16 @@ button {
     font-size: 1.25rem;
     display: flex;
     align-items: center;
+    transition: margin 0.3s ease;
+    flex-shrink: 0;
   }
   
   &__label {
     font-size: 0.9375rem;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -347,6 +429,10 @@ button {
   color: $text-light;
   transition: $transition;
   border-radius: $rounded;
+  cursor: pointer;
+  background: none;
+  border: none;
+  text-align: left;
   
   &:hover {
     color: $danger;
@@ -356,11 +442,169 @@ button {
   &__icon {
     margin-right: $spacing-3;
     font-size: 1.25rem;
+    transition: margin 0.3s ease;
+    flex-shrink: 0;
   }
   
   span {
     font-size: 0.9375rem;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+
+// Search form styles
+.search-form {
+  position: relative;
+  width: 100%;
+  
+  &__container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    position: absolute;
+    left: $spacing-4;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $text-light;
+    pointer-events: none;
+    transition: color 0.2s ease;
+  }
+
+  &__input {
+    @include input-style;
+    padding: $spacing-2 $spacing-4 $spacing-2 $spacing-10;
+    background-color: $background;
+    width: 100%;
+    border-radius: $rounded;
+    transition: all 0.2s ease;
+    font-size: 0.9375rem;
+    height: 40px;
+    
+    &::placeholder {
+      color: $text-light;
+      opacity: 0.8;
+    }
+    
+    &:focus {
+      background-color: $white;
+      box-shadow: 0 0 0 2px rgba($primary, 0.2);
+      outline: none;
+      
+      + .search-form__icon {
+        color: $primary;
+      }
+    }
+  }
+
+  &__clear {
+    position: absolute;
+    right: $spacing-2;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: $text-light;
+    cursor: pointer;
+    padding: $spacing-1;
+    border-radius: $rounded;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      color: $text;
+      background-color: rgba($text-light, 0.1);
+    }
+    
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba($primary, 0.2);
+    }
+  }
+}
+
+// Search suggestions dropdown
+.search-suggestions {
+  position: absolute;
+  top: calc(100% + $spacing-2);
+  left: 0;
+  right: 0;
+  background: $white;
+  border-radius: $rounded;
+  box-shadow: $shadow-md;
+  z-index: $z-dropdown;
+  max-height: 300px;
+  overflow-y: auto;
+  @include custom-scrollbar;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  &__item {
+    padding: $spacing-3 $spacing-4;
+    cursor: pointer;
+    transition: $transition;
+    color: $text;
+    display: flex;
+    align-items: center;
+    gap: $spacing-3;
+    
+    &:hover {
+      background-color: $background;
+    }
+    
+    &--highlighted {
+      background-color: rgba($primary, 0.05);
+      color: $primary;
+    }
+    
+    &-icon {
+      color: $text-light;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    
+    &-text {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+  
+  &__empty {
+    padding: $spacing-3 $spacing-4;
+    color: $text-light;
+    text-align: center;
+    font-size: 0.875rem;
+  }
+}
+
+// Responsive adjustments
+@include respond('md') {
+  .search-form {
+    max-width: 400px;
+    margin: 0 auto;
+    
+    &__input {
+      height: 44px;
+      font-size: 1rem;
+    }
   }
 }
 

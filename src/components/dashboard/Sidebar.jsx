@@ -6,10 +6,12 @@ import {
   FiAward, 
   FiSettings, 
   FiHelpCircle, 
-  FiLogOut 
+  FiLogOut,
+  FiChevronLeft,
+  FiMenu
 } from 'react-icons/fi';
 
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => {
   const location = useLocation();
   
   const navItems = [
@@ -20,27 +22,51 @@ const Sidebar = ({ isOpen, onClose }) => {
     { icon: <FiHelpCircle />, label: 'Help', path: '/help' },
   ];
 
+  const handleNavClick = () => {
+    if (isMobile) {
+      onClose();
+    }
+  };
+
   return (
     <>
-      <div 
-        className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--active' : ''}`} 
-        onClick={onClose}
-      />
-      <aside className={`sidebar ${isOpen ? 'sidebar--open' : ''}`}>
+      {isMobile && (
+        <div 
+          className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--active' : ''}`} 
+          onClick={onClose}
+        />
+      )}
+      
+      <aside 
+        className={`
+          sidebar 
+          ${isMobile ? (isOpen ? 'sidebar--open' : '') : ''} 
+          ${collapsed ? 'sidebar--collapsed' : ''}
+        `}
+      >
         <div className="sidebar__header">
-          <h2>Menu</h2>
+          {!collapsed && <h2>Menu</h2>}
+          <button 
+            className="sidebar__toggle" 
+            onClick={onToggleCollapse}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={collapsed ? 'Expand' : 'Collapse'}
+          >
+            {collapsed ? <FiMenu /> : <FiChevronLeft />}
+          </button>
         </div>
         
         <nav className="sidebar__nav">
           <ul className="nav-menu">
             {navItems.map((item, index) => (
               <li key={index} className="nav-menu__item">
-                <Link 
-                  to={item.path} 
+                <Link
+                  to={item.path}
                   className={`nav-menu__link ${
                     location.pathname === item.path ? 'nav-menu__link--active' : ''
                   }`}
-                  onClick={onClose}
+                  onClick={handleNavClick}
+                  title={collapsed ? item.label : ''}
                 >
                   <span className="nav-menu__icon">{item.icon}</span>
                   <span className="nav-menu__label">{item.label}</span>
@@ -49,11 +75,15 @@ const Sidebar = ({ isOpen, onClose }) => {
             ))}
           </ul>
         </nav>
-        
+
         <div className="sidebar__footer">
-          <button className="logout-button">
+          <button 
+            className="logout-button" 
+            onClick={handleNavClick}
+            title={collapsed ? 'Logout' : ''}
+          >
             <FiLogOut className="logout-button__icon" />
-            <span>Logout</span>
+            {!collapsed && <span>Logout</span>}
           </button>
         </div>
       </aside>
