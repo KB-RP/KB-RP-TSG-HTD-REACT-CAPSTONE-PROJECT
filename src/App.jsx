@@ -2,12 +2,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-
 import { AuthProvider, useAuth } from './contexts';
 import SignIn from './pages/signIn';
 import SignUp from './pages/signUp';
-import CourseDetail from './pages/courseDetail';
 import DashboardHome from './pages/dashboard';
 import MyCourses from './pages/myCourses';
 import AdminSettings from './pages/adminSettings';
 import { AdminRoute } from './components/common/adminRoute';
 import Layout from './pages/layout';
+import CourseDetail from './pages/CourseDetail';
+
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
