@@ -1,0 +1,63 @@
+@import 'antd/dist/antd.css';
+
+.admin-settings {
+  // padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  
+  .admin-header {
+    margin-bottom: 24px;
+    
+    h1 {
+      margin-bottom: 0;
+      color: #1a1a1a;
+    }
+  }
+
+  .admin-tabs {
+    .ant-tabs-nav {
+      margin-bottom: 24px;
+    }
+
+    .ant-tabs-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      font-weight: 500;
+    }
+
+    .ant-tabs-tab-active {
+      background-color: #f0f7ff;
+      border-color: #1890ff;
+    }
+  }
+
+  .ant-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+    margin-bottom: 24px;
+    
+    .ant-card-head {
+      border-bottom: 1px solid #f0f0f0;
+      
+      .ant-card-head-title {
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .admin-settings {
+    padding: 16px;
+    
+    .admin-tabs {
+      .ant-tabs-tab {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+  }
+}

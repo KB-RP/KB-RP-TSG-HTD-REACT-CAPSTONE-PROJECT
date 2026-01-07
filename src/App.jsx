@@ -8,6 +8,7 @@ import AdminSettings from './pages/adminSettings';
 import { AdminRoute } from './components/common/adminRoute';
 import Layout from './pages/layout';
 import CourseDetail from './pages/CourseDetail';
+import 'antd/dist/antd.css';
 
 
 // Protected Route Component
