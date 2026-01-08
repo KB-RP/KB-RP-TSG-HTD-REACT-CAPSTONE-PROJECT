@@ -9,30 +9,12 @@ import {
   XAxis,
   YAxis,
   CartesianGrid,
-  Tooltip as RechartsTooltip,
+  Tooltip,
   Legend
 } from 'recharts';
+import * as htmlToImage from 'html-to-image';
 
-const { Option } = Select;
-const { Title, Text } = Typography;
-
-// Recharts-based chart wrapper
-const RechartsBar = ({ data, dataKey, height = 360 }) => {
-  return (
-    <div style={{ width: '100%', height }}>
-      <ResponsiveContainer>
-        <BarChart data={data} margin={{ top: 16, right: 16, left: 8, bottom: 32 }}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="label" interval={0} angle={-10} textAnchor="end" height={60} />
-          <YAxis />
-          <RechartsTooltip />
-          <Legend />
-          <Bar dataKey={dataKey} name={dataKey} fill="#1677ff" radius={[4, 4, 0, 0]} />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
-};
+const { Text } = Typography;
 
 const MAX_SELECTION = 7;
 
@@ -40,23 +22,22 @@ const CourseAnalytics = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedIds, setSelectedIds] = useState([]);
-  const [metric, setMetric] = useState('students');
   const [showChart, setShowChart] = useState(false);
   const chartRef = useRef(null);
 
   useEffect(() => {
-    const load = async () => {
+    const loadCourses = async () => {
       setLoading(true);
       try {
         const res = await courseAPI.getCourses();
         setCourses(Array.isArray(res) ? res : []);
-      } catch (e) {
+      } catch {
         message.error('Failed to load courses');
       } finally {
         setLoading(false);
       }
     };
-    load();
+    loadCourses();
   }, []);
 
   const options = useMemo(
@@ -74,18 +55,49 @@ const CourseAnalytics = () => {
   );
 
   const chartData = useMemo(() => {
-    const key = metric;
-    return selectedCourses.map((c) => ({
-      id: c.id,
+    if (selectedCourses.length === 0) return [];
+
+    const maxStudents = Math.max(...selectedCourses.map(c => c.students || 0));
+    const maxDuration = Math.max(...selectedCourses.map(c => c.duration || 0));
+    const maxPrice = Math.max(...selectedCourses.map(c => c.price || 0));
+    const maxRating = 5;
+
+    return selectedCourses.map(c => ({
       label: c.title,
-      [key]: Number(c[key]) || 0,
+
+      students: ((c.students || 0) / maxStudents) * 100,
+      duration: ((c.duration || 0) / maxDuration) * 100,
+      price: ((c.price || 0) / maxPrice) * 100,
+      rating: ((c.rating || 0) / maxRating) * 100,
+
+      // keep originals for tooltip
+      _students: c.students,
+      _duration: c.duration,
+      _price: c.price,
+      _rating: c.rating
     }));
-  }, [selectedCourses, metric]);
+  }, [selectedCourses]);
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (!active || !payload?.length) return null;
+
+    const data = payload[0].payload;
+
+    return (
+      <div style={{ background: '#fff', padding: 12, border: '1px solid #ddd' }}>
+        <strong>{label}</strong>
+        <div>👥 Students: {data._students}</div>
+        <div>⏱ Duration: {data._duration} hrs</div>
+        <div>💲 Price: ${data._price}</div>
+        <div>⭐ Rating: {data._rating}</div>
+      </div>
+    );
+  };
 
   const handleChange = (vals) => {
     if (vals.length > MAX_SELECTION) {
       message.warning(`You can select maximum ${MAX_SELECTION} courses`);
-      return; // ignore until user removes
+      return;
     }
     setSelectedIds(vals);
   };
@@ -95,125 +107,109 @@ const CourseAnalytics = () => {
   };
 
   const handleView = () => {
-    if (selectedIds.length === 0) {
+    if (!selectedIds.length) {
       message.info('Please select at least one course');
       return;
     }
     setShowChart(true);
-    // Slight delay to ensure canvas renders before snapshot if needed
-    setTimeout(() => {}, 0);
   };
 
-  // Convert Recharts SVG to PNG
   const downloadPng = async () => {
-    const svg = chartRef.current?.querySelector('svg');
-    if (!svg) {
-      message.error('Chart not ready to download');
+    if (!chartRef.current) {
+      message.error('Chart not ready');
       return;
     }
-    const serializer = new XMLSerializer();
-    const svgString = serializer.serializeToString(svg);
-    const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(svgBlob);
 
-    const img = new Image();
-    img.crossOrigin = 'anonymous';
-    await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-      img.src = url;
-    });
+    try {
+      const dataUrl = await htmlToImage.toPng(chartRef.current, {
+        backgroundColor: '#ffffff',
+        pixelRatio: 2,
+      });
 
-    const canvas = document.createElement('canvas');
-    const bbox = svg.getBoundingClientRect();
-    canvas.width = Math.max(800, Math.floor(bbox.width));
-    canvas.height = Math.max(400, Math.floor(bbox.height));
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    URL.revokeObjectURL(url);
-    const link = document.createElement('a');
-    link.download = `course-analysis-${metric}.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+      const link = document.createElement('a');
+      link.download = 'course-analytics.png';
+      link.href = dataUrl;
+      link.click();
+    } catch {
+      message.error('Failed to export PNG');
+    }
   };
 
+
+
   return (
-    <div className="course-analytics">
-      <Card title="Course Analytics" loading={loading}>
-        <Space direction="vertical" style={{ width: '100%' }} size="large">
-          <Row gutter={[16, 16]} align="middle">
-            <Col xs={24} md={16}>
-              <Text strong>Select up to {MAX_SELECTION} courses</Text>
-              <Select
-                mode="multiple"
-                allowClear
-                placeholder="Search and select courses"
-                value={selectedIds}
-                onChange={handleChange}
-                style={{ width: '100%', marginTop: 8 }}
-                maxTagCount="responsive"
-                options={options}
-                showSearch
-                optionFilterProp="label"
-              />
-            </Col>
-            <Col xs={24} md={8}>
-              <Text strong>Metric</Text>
-              <Select value={metric} onChange={setMetric} style={{ width: '100%', marginTop: 8 }}>
-                <Option value="students">Students</Option>
-                <Option value="rating">Rating</Option>
-                <Option value="duration">Duration (hrs)</Option>
-                <Option value="price">Price ($)</Option>
-              </Select>
-            </Col>
-          </Row>
+    <Card title="Course Analytics" loading={loading}>
+      <Space direction="vertical" style={{ width: '100%' }} size="large">
+        <Row gutter={[16, 16]}>
+          <Col span={24}>
+            <Text strong>Select up to {MAX_SELECTION} courses</Text>
+            <Select
+              mode="multiple"
+              allowClear
+              showSearch
+              placeholder="Search and select courses"
+              options={options}
+              value={selectedIds}
+              onChange={handleChange}
+              style={{ width: '100%', marginTop: 8 }}
+            />
+          </Col>
+        </Row>
 
-          {/* Capsules for selected */}
-          <div>
-            <Space wrap size={[8, 8]}>
-              {selectedCourses.map((c) => (
-                <Tag
-                  key={c.id}
-                  color="blue"
-                  closable
-                  onClose={(e) => {
-                    e.preventDefault();
-                    removeSelection(c.id);
-                  }}
-                >
-                  {c.title}
-                </Tag>
-              ))}
-              {selectedCourses.length === 0 && <Text type="secondary">No courses selected</Text>}
-            </Space>
-          </div>
-
-          <Space>
-            <Button type="primary" icon={<EyeOutlined />} onClick={handleView}>
-              View Analysis
-            </Button>
-            <Button icon={<DownloadOutlined />} onClick={downloadPng} disabled={!showChart || selectedCourses.length === 0}>
-              Download Analysis
-            </Button>
-          </Space>
-
-          <Divider style={{ margin: '12px 0' }} />
-
-          <div ref={chartRef}>
-            {showChart && selectedCourses.length > 0 ? (
-              <RechartsBar data={chartData} dataKey={metric} height={360} />
-            ) : (
-              <Empty description="No analysis to display" />
-            )}
-          </div>
+        {/* Selected course tags */}
+        <Space wrap>
+          {selectedCourses.map((c) => (
+            <Tag
+              key={c.id}
+              color="blue"
+              closable
+              onClose={(e) => {
+                e.preventDefault();
+                removeSelection(c.id);
+              }}
+            >
+              {c.title}
+            </Tag>
+          ))}
         </Space>
-      </Card>
-    </div>
+
+        <Space>
+          <Button type="primary" icon={<EyeOutlined />} onClick={handleView}>
+            View Analysis
+          </Button>
+          <Button
+            icon={<DownloadOutlined />}
+            onClick={downloadPng}
+            disabled={!showChart || !selectedCourses.length}
+          >
+            Download PNG
+          </Button>
+        </Space>
+
+        <Divider />
+
+        <div ref={chartRef}>
+          {showChart && chartData.length ? (
+            <ResponsiveContainer width="100%" height={420}>
+              <BarChart data={chartData} barCategoryGap={30}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="label" />
+                <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} />
+                <Tooltip content={<CustomTooltip />} />
+                <Legend />
+                <Bar dataKey="students" name="Students" fill="#1677ff" />
+                <Bar dataKey="duration" name="Duration" fill="#faad14" />
+                <Bar dataKey="price" name="Price" fill="#eb2f96" />
+                <Bar dataKey="rating" name="Rating" fill="#52c41a" />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <Empty description="No analysis to display" />
+          )}
+        </div>
+      </Space>
+    </Card>
   );
 };
 
 export default CourseAnalytics;
-

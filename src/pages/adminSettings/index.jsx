@@ -3,12 +3,7 @@ import { Tabs, Card, Button, Typography } from 'antd';
 import {
   PlusOutlined,
   EditOutlined,
-  DeleteOutlined,
   BarChartOutlined,
-  SearchOutlined,
-  UserOutlined,
-  BookOutlined,
-  AreaChartOutlined
 } from '@ant-design/icons';
 import './AdminSettings.scss';
 import AddCourse from './childs/addCourse';
@@ -17,11 +12,6 @@ import CourseAnalytics from './childs/courseAnalytics';
 
 const { TabPane } = Tabs;
 const { Title } = Typography;
-
-
-
-
-
 
 const AdminSettings = () => {
   const [activeTab, setActiveTab] = useState('1');
@@ -33,11 +23,11 @@ const AdminSettings = () => {
   return (
     <div className="admin-settings">
       <div className="admin-header">
-        <Title level={2}>Admin Dashboard</Title>
+        <Title level={2}>Admin Settings</Title>
       </div>
-      
-      <Tabs 
-        activeKey={activeTab} 
+
+      <Tabs
+        activeKey={activeTab}
         onChange={handleTabChange}
         className="admin-tabs"
         type="card"
@@ -51,9 +41,9 @@ const AdminSettings = () => {
           }
           key="1"
         >
-          <AddCourse/>
+          <AddCourse />
         </TabPane>
-        
+
         <TabPane
           tab={
             <span>
@@ -63,9 +53,9 @@ const AdminSettings = () => {
           }
           key="2"
         >
-          <ManageCourses/>
+          <ManageCourses />
         </TabPane>
-        
+
         <TabPane
           tab={
             <span>
@@ -75,7 +65,7 @@ const AdminSettings = () => {
           }
           key="3"
         >
-<CourseAnalytics/>
+          <CourseAnalytics />
         </TabPane>
       </Tabs>
     </div>

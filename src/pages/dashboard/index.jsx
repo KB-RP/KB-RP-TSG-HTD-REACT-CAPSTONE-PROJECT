@@ -19,14 +19,9 @@ const [data , setData] = useState([]);
     <div className="dashboard-home">
       <div className="dashboard-header">
         <h1 className="dashboard-title">Explore Courses</h1>
-        <p className="dashboard-subtitle">Handpicked recommendations for you</p>
       </div>
 
       <div className="courses-section">
-        <div className="section-header">
-          <h2>Recommended</h2>
-        </div>
-
         <div className="courses-grid">
           {data?.map((course) => (
             <CourseCard key={course.id} {...course} />

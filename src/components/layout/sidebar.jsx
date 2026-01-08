@@ -18,12 +18,12 @@ const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => 
   const navItems = [
     { icon: <FiHome />, label: 'Dashboard', path: '/dashboard' },
     { icon: <FiBookOpen />, label: 'My Courses', path: '/dashboard/my-course' },
-    { icon: <FiAward />, label: 'Achievements', path: '/dashboard/achievements' },
+    // { icon: <FiAward />, label: 'Achievements', path: '/dashboard/achievements' },
     ...(user?.role === 'admin' 
       ? [{ icon: <FiSettings />, label: 'Settings', path: '/dashboard/admin-settings' }]
       : []
     ),
-    { icon: <FiHelpCircle />, label: 'Help', path: '/help' },
+    // { icon: <FiHelpCircle />, label: 'Help', path: '/help' },
   ];
 
   const handleNavClick = () => {
