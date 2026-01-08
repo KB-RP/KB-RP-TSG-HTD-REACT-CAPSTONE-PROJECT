@@ -68,13 +68,13 @@ const MyCourses = () => {
                     <div key={course.id} className="course-card">
                         <div className="course-thumbnail">
                             <img src={course.thumbnail} alt={course.title} />
-                            <div className="progress-bar">
+                            {/* <div className="progress-bar">
                                 <div
                                     className="progress-fill"
                                     style={{ width: `${progress}%` }}
                                 ></div>
-                            </div>
-                            <span className="progress-text">{Math.round(progress)}% complete</span>
+                            </div> */}
+                            {/* <span className="progress-text">{Math.round(progress)}% complete</span> */}
                         </div>
 
                         <div className="course-content">
@@ -100,7 +100,7 @@ const MyCourses = () => {
 
                             <div className="course-actions">
                                 <Link
-                                    to={`/courses/${course.id}`}
+                                    to={`/courses/${course.id}?tab=overview`}
                                     className="continue-btn"
                                 >
                                     <FiPlay /> {progress > 0 ? 'Continue' : 'Start Learning'}

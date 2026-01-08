@@ -3,16 +3,15 @@ import { COURSES } from './apiEndpoints';
 
 export const courseAPI = {
 
+    createCourse: async (courseData) => {
+        const response = await api.post('/api/courses', courseData);
+        return response.data;
+    },
+    updateCourse: async (id, courseData) => {
+        const response = await api.put(`/api/courses/${id}`, courseData);
+        return response.data;
+    },
 
-      createCourse: async (courseData) => {
-    const response = await api.post('/api/courses', courseData);
-    return response.data;
-  },
-  updateCourse: async (id, courseData) => {
-    const response = await api.put(`/api/courses/${id}`, courseData);
-    return response.data;
-  },
-  
     getCourses: async () => {
         try {
             const response = await apiClient.get(COURSES.getCourse);
@@ -34,7 +33,6 @@ export const courseAPI = {
             throw error.response?.data || error.message;
         }
     },
-
 
     enrollInCourse: async (payload) => {
         try {

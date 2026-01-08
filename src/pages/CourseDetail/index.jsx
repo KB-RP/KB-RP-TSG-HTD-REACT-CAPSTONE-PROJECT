@@ -4,16 +4,46 @@ import { useAuth } from '../../contexts';
 import { courseAPI } from '../../utils/api/courseApi';
 import { FaPlay, FaClock, FaStar, FaUserGraduate, FaCertificate, FaMobileAlt, FaBookOpen } from 'react-icons/fa';
 import './CourseDetail.scss';
+import { Collapse, Tooltip, Modal } from 'antd';
+const { Panel } = Collapse;
+import { useSearchParams } from 'react-router-dom';
+import CoursePreviewModal from '../../modal/coursePreview';
 
 const CourseDetail = () => {
   const { id } = useParams();
-  const { user } = useAuth();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialTab = searchParams.get('tab') || '1';
+  const [activeTab, setActiveTab] = useState(initialTab);
+  const [previewVideo, setPreviewVideo] = useState(null);
+
+  useEffect(() => {
+    const urlTab = searchParams.get('tab');
+    if (urlTab && urlTab !== activeTab) {
+      setActiveTab(urlTab);
+    }
+    if (!urlTab) {
+      setSearchParams(prev => {
+        const next = new URLSearchParams(prev);
+        next.set('tab', activeTab);
+        return next;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    setSearchParams(prev => {
+      const next = new URLSearchParams(prev);
+      next.set('tab', key);
+      return next;
+    });
+  };
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -39,8 +69,14 @@ const CourseDetail = () => {
     //   return;
     // }
     // Implement enrollment logic
-   const res = await courseAPI.enrollInCourse({ userId: user?.id, courseId: id });
+    const res = await courseAPI.enrollInCourse({ userId: user?.id, courseId: id });
     setIsEnrolled(true);
+  };
+
+  const handlePreviewClick = (lesson) => {
+    if (lesson.videoLink) {
+      setPreviewVideo(lesson.videoLink);
+    }
   };
 
   if (loading) {
@@ -51,6 +87,13 @@ const CourseDetail = () => {
     return <div className="course-error">Course not found</div>;
   }
 
+  const handleCoursePreview = () => {
+    const link = course?.vdoLink || course?.videoLink;
+    if (link) {
+      setPreviewVideo(link);
+    }
+  };
+
   return (
     <div className="course-detail">
       {/* Hero Section */}
@@ -60,7 +103,7 @@ const CourseDetail = () => {
             <span className="course-category">{course.category}</span>
             <h1 className="course-title">{course.title}</h1>
             <p className="course-subtitle">{course.description}</p>
-            
+
             <div className="course-meta">
               <div className="meta-item">
                 <FaStar className="meta-icon" />
@@ -80,25 +123,35 @@ const CourseDetail = () => {
       </div>
 
       <div className="container course-container">
+        <Tooltip title="Back to dashboard" placement="right">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="back-button"
+            aria-label="Back to dashboard"
+          >
+            &larr;
+          </button>
+        </Tooltip>
+
         <div className="course-layout">
           {/* Main Content */}
           <main className="course-main">
             <div className="course-tabs">
-              <button 
+              <button
                 className={`tab-btn ${activeTab === 'overview' ? 'active' : ''}`}
-                onClick={() => setActiveTab('overview')}
+                onClick={() => handleTabChange('overview')}
               >
                 Overview
               </button>
-              <button 
+              <button
                 className={`tab-btn ${activeTab === 'curriculum' ? 'active' : ''}`}
-                onClick={() => setActiveTab('curriculum')}
+                onClick={() => handleTabChange('curriculum')}
               >
                 Curriculum
               </button>
-              <button 
+              <button
                 className={`tab-btn ${activeTab === 'reviews' ? 'active' : ''}`}
-                onClick={() => setActiveTab('reviews')}
+                onClick={() => handleTabChange('reviews')}
               >
                 Reviews
               </button>
@@ -119,12 +172,17 @@ const CourseDetail = () => {
 
                   <h2>Course Content</h2>
                   <div className="course-preview">
-                    {course.modules?.slice(0, 2).map((module, idx) => (
+                    {course?.modules?.slice(0, 2).map((module, idx) => (
                       <div key={idx} className="preview-module">
                         <h3>{module.title}</h3>
                         <div className="preview-lessons">
                           {module.lessons.slice(0, 3).map((lesson, lIdx) => (
-                            <div key={lIdx} className="preview-lesson">
+                            <div
+                              key={lIdx}
+                              className="preview-lesson"
+                              onClick={() => handlePreviewClick(lesson)}
+                              style={{ cursor: 'pointer' }}
+                            >
                               <FaPlay className="play-icon" />
                               <span>{lesson.title}</span>
                               {lesson.preview && <span className="preview-badge">Preview</span>}
@@ -133,7 +191,6 @@ const CourseDetail = () => {
                         </div>
                       </div>
                     ))}
-                    <button className="view-all-btn">View all content</button>
                   </div>
                 </div>
               )}
@@ -142,21 +199,40 @@ const CourseDetail = () => {
                 <div className="course-curriculum">
                   {course.modules?.map((module, mIdx) => (
                     <div key={mIdx} className="module">
-                      <div className="module-header">
-                        <h3>{module.title}</h3>
-                        <span>{module.lessons.length} lessons • {Math.floor(module.duration / 60)}h {module.duration % 60}m</span>
-                      </div>
-                      <div className="lessons-list">
-                        {module.lessons.map((lesson, lIdx) => (
-                          <div key={lIdx} className="lesson-item">
-                            <div className="lesson-info">
-                              <FaPlay className="lesson-icon" />
-                              <span className="lesson-title">{lesson.title}</span>
-                              {lesson.preview && <span className="preview-badge">Preview</span>}
-                            </div>
-                            <span className="lesson-duration">{lesson.duration}m</span>
-                          </div>
-                        ))}
+                      <div className="lessons-accordion">
+                        <Collapse
+                          accordion
+                          expandIconPlacement="right"
+                        >
+                          {module.lessons.map((lesson, lIdx) => (
+                            <Panel
+                              key={lIdx}
+                              header={
+                                <div
+                                  className="lesson-header"
+                                  onClick={(e) => {
+                                    if (lesson.preview) {
+                                      e.stopPropagation();
+                                      handlePreviewClick(lesson);
+                                    }
+                                  }}
+                                  style={{ cursor: lesson.preview ? 'pointer' : 'default' }}
+                                >
+                                  <div className="lesson-info">
+                                    <FaPlay className="lesson-icon" />
+                                    <span className="lesson-title">{lesson?.title}</span>
+                                    {lesson.preview && <span className="preview-badge">Preview</span>}
+                                  </div>
+                                  <span className="lesson-duration">{lesson?.duration}m</span>
+                                </div>
+                              }
+                            >
+                              <div className="lesson-summary">
+                                <p>{lesson?.summary || 'No summary available for this lesson.'}</p>
+                              </div>
+                            </Panel>
+                          ))}
+                        </Collapse>
                       </div>
                     </div>
                   ))}
@@ -170,9 +246,9 @@ const CourseDetail = () => {
                       <div className="rating-number">{course.rating}</div>
                       <div className="rating-stars">
                         {[...Array(5)].map((_, i) => (
-                          <FaStar 
-                            key={i} 
-                            className={`star ${i < Math.floor(course.rating) ? 'active' : ''}`} 
+                          <FaStar
+                            key={i}
+                            className={`star ${i < Math.floor(course.rating) ? 'active' : ''}`}
                           />
                         ))}
                       </div>
@@ -193,7 +269,9 @@ const CourseDetail = () => {
             <div className="course-card">
               <div className="course-preview">
                 <img src={course.thumbnail} alt={course.title} className="course-thumbnail" />
-                <button className="preview-btn">
+                <button className="preview-btn"
+                  onClick={handleCoursePreview}
+                  aria-label="Preview this course">
                   <FaPlay /> Preview this course
                 </button>
               </div>
@@ -205,7 +283,7 @@ const CourseDetail = () => {
                     <span className="original-price">${course.originalPrice.toFixed(2)}</span>
                   )}
                 </div>
-                <button 
+                <button
                   className={`enroll-btn ${isEnrolled ? 'enrolled' : ''}`}
                   onClick={handleEnroll}
                   disabled={isEnrolled}
@@ -232,8 +310,17 @@ const CourseDetail = () => {
           </aside>
         </div>
       </div>
+
+      {/* Video Preview Modal */}
+      <CoursePreviewModal
+        open={!!previewVideo}
+        onClose={() => setPreviewVideo(null)}
+        url={previewVideo}
+        title="Preview"
+      />
     </div>
   );
 };
+
 
 export default CourseDetail;

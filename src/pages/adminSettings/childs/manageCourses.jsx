@@ -152,7 +152,7 @@ const ManageCourses = () => {
       render: (_, record) => (
         <Space size={0} style={{ display: 'flex', justifyContent: 'center' }}>
           <Tooltip title="View Details">
-            <Link to={`/courses/${record.id}`}>
+            <Link to={`/courses/${record.id}?tab=overview`}>
               <Button
                 type="text"
                 icon={<InfoCircleOutlined />}

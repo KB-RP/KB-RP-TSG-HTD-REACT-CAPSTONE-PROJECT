@@ -21,7 +21,7 @@ const CourseCard = ({
     if (onClick) {
       onClick(e);
     } else {
-      navigate(`/courses/${id}`);
+      navigate(`/courses/${id}?tab=overview`);
     }
   };
   return (
