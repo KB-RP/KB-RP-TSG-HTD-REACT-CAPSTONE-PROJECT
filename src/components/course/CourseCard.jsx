@@ -51,9 +51,9 @@ const CourseCard = ({
 
           <div className="course-card__stats">
             {typeof students === 'number' && (
-              <span className="course-card__stat">{students.toLocaleString()} students</span>
+              <span className="course-card__stat">{students.toLocaleString()} students </span>
             )}
-            {duration && <span className="course-card__stat">{duration}</span>}
+            {duration && <span className="course-card__stat">{duration} hrs</span>}
           </div>
         </div>
 

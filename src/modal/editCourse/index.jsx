@@ -1,8 +1,10 @@
-import { Modal } from 'antd';
+import { Form, message, Modal } from 'antd';
 import React from 'react'
 import CourseForm from '../../components/course/CourseForm';
+import { courseAPI } from '../../utils/api/courseApi';
 
 const EditCourseModal = ({ editingCourse, editFormVisible, setEditFormVisible, fetchCourses, loading, setLoading }) => {
+    const [form] = Form.useForm();
   return (
     <>
       <Modal
@@ -20,8 +22,8 @@ const EditCourseModal = ({ editingCourse, editFormVisible, setEditFormVisible, f
               setLoading(true);
               await courseAPI.updateCourse(editingCourse.id, values);
               message.success('Course updated successfully!');
-              setEditFormVisible(false);
               fetchCourses(); // Refresh the course list
+              setEditFormVisible(false);
             } catch (error) {
               message.error('Failed to update course');
               console.error(error);
@@ -30,6 +32,7 @@ const EditCourseModal = ({ editingCourse, editFormVisible, setEditFormVisible, f
             }
           }}
           loading={loading}
+          form={form}
         />
       </Modal>
     </>

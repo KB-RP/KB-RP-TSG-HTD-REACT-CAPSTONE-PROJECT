@@ -4,14 +4,17 @@ import { COURSES } from './apiEndpoints';
 export const courseAPI = {
 
     createCourse: async (courseData) => {
-        const response = await api.post('/api/courses', courseData);
+        const response = await apiClient.post(COURSES.createCourse, courseData);
         return response.data;
     },
     updateCourse: async (id, courseData) => {
-        const response = await api.put(`/api/courses/${id}`, courseData);
+        const response = await apiClient.put(`${COURSES.createCourse}/${id}`, courseData);
         return response.data;
     },
-
+    deleteCourse: async (id) => {
+        const response = await apiClient.delete(`${COURSES.createCourse}/${id}`);
+        return response.data;
+    },
     getCourses: async () => {
         try {
             const response = await apiClient.get(COURSES.getCourse);

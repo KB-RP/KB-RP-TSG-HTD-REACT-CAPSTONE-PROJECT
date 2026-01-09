@@ -18,5 +18,7 @@ export const USERS = {
 export const COURSES = {
   getCourse: `${API_BASE}/courses`,
   enrollInCourse : `${API_BASE}/enrollments`,
+  createCourse: `${API_BASE}/courses`,
+  editCourse: `${API_BASE}/courses`,
   // Add more course-related endpoints here
 };
