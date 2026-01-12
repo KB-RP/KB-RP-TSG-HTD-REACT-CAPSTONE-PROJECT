@@ -45,11 +45,6 @@ const SignIn = () => {
               required
               error={errors.password}
             />
-            <div className="auth__group" style={{ textAlign: 'right' }}>
-              <a href="/forgot-password" className="auth__link">
-                Forgot password? 
-              </a>
-            </div>
             <button
               type="submit"
               className="auth__button auth__button--primary"

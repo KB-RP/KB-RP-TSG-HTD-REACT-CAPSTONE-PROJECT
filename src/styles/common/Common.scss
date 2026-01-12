@@ -1,0 +1,19 @@
+  .common__button {
+    height: 40px;
+    padding: 0 20px;
+    border-radius: 8px;
+    border: none;
+    background: #1677ff;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      background:   #0958d9 ;
+    }
+  }
+
+
+  .courses-grid__empty {
+  grid-column: 1 / -1;
+  min-height: 300px;
+}

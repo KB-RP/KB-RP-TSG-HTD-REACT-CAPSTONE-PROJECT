@@ -33,44 +33,47 @@ const useSignUp = () => {
         }
     };
 
-    const validateForm = () => {
-        const newErrors = {};
-        let isValid = true;
+const validateForm = () => {
+  const newErrors = {
+    confirmPassword: ''
+  };
+  let isValid = true;
 
-        if (!formData.firstName.trim()) {
-            newErrors.firstName = "First name is required";
-            isValid = false;
-        }
+  if (!formData.firstName.trim()) {
+    newErrors.firstName = "First name is required";
+    isValid = false;
+  }
 
-        if (!formData.lastName.trim()) {
-            newErrors.lastName = "Last name is required";
-            isValid = false;
-        }
+  if (!formData.lastName.trim()) {
+    newErrors.lastName = "Last name is required";
+    isValid = false;
+  }
 
-        if (!formData.email) {
-            newErrors.email = "Email is required";
-            isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = "Email is invalid";
-            isValid = false;
-        }
+  if (!formData.email) {
+    newErrors.email = "Email is required";
+    isValid = false;
+  } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    newErrors.email = "Email is invalid";
+    isValid = false;
+  }
 
-        if (!formData.password) {
-            newErrors.password = "Password is required";
-            isValid = false;
-        } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
-            isValid = false;
-        }
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+    isValid = false;
+  } else if (formData.password.length < 6) {
+    newErrors.password = "Password must be at least 6 characters";
+    isValid = false;
+  }
 
-        if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = "Passwords do not match";
-            isValid = false;
-        }
+  if (formData.password !== formData.confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+    isValid = false;
+  }
 
-        setErrors(newErrors);
-        return isValid;
-    };
+  setErrors(newErrors);
+  return isValid;
+};
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -82,7 +85,9 @@ const useSignUp = () => {
 
         const res = await authAPI.register(formData);
 
-        console.log("response=>>>>", res)
+        if (res.success) {
+            navigate("/signin");
+        }
 
         setIsLoading(false);
     };

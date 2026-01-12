@@ -3,11 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts';
 import { courseAPI } from '../../utils/api/courseApi';
 import { FaPlay, FaClock, FaStar, FaUserGraduate, FaCertificate, FaMobileAlt, FaBookOpen } from 'react-icons/fa';
-import './CourseDetail.scss';
-import { Collapse, Tooltip, Modal } from 'antd';
+import '../../styles/course/courseDetail.scss';
+
+import { Collapse, Tooltip , Flex } from 'antd';
 const { Panel } = Collapse;
 import { useSearchParams } from 'react-router-dom';
-import CoursePreviewModal from '../../modal/coursePreview';
+import { getYoutubeVideoId } from '../../utils/common/helper';
 
 const CourseDetail = () => {
   const { id } = useParams();
@@ -19,7 +20,7 @@ const CourseDetail = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTab = searchParams.get('tab') || '1';
   const [activeTab, setActiveTab] = useState(initialTab);
-  const [previewVideo, setPreviewVideo] = useState(null);
+  const [previewVideoId, setPreviewVideoId] = useState(null);
 
   useEffect(() => {
     const urlTab = searchParams.get('tab');
@@ -89,10 +90,12 @@ const CourseDetail = () => {
 
   const handleCoursePreview = () => {
     const link = course?.vdoLink || course?.videoLink;
-    if (link) {
-      setPreviewVideo(link);
+    const videoId = getYoutubeVideoId(link);
+    if (videoId) {
+      setPreviewVideoId(videoId);
     }
   };
+
 
   return (
     <div className="course-detail">
@@ -267,22 +270,42 @@ const CourseDetail = () => {
           {/* Sidebar */}
           <aside className="course-sidebar">
             <div className="course-card">
-              <div className="course-preview">
-                <img src={course.thumbnail} alt={course.title} className="course-thumbnail" />
-                <button className="preview-btn"
-                  onClick={handleCoursePreview}
-                  aria-label="Preview this course">
-                  <FaPlay /> Preview this course
-                </button>
-              </div>
+              <div className="video-wrapper">
+                {previewVideoId ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${previewVideoId}?autoplay=1`}
+                    title="Course Preview"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <>
+                    <Flex justify="center">
+                      <div className="course-card">
+                        <div className="video-wrapper">
 
+                          <button className="preview-btn" onClick={handleCoursePreview}>
+                            <FaPlay /> Preview this course
+                          </button>
+                        </div>
+                      </div>
+                    </Flex>
+
+                  </>
+                )}
+              </div>
               <div className="pricing">
-                <div className="price">
-                  ${course.price?.toFixed(2)}
-                  {course.originalPrice && (
-                    <span className="original-price">${course.originalPrice.toFixed(2)}</span>
-                  )}
-                </div>
+                <Flex justify="center">
+                  <div className="price">
+                    ${course.price?.toFixed(2)}
+                    {course.originalPrice && (
+                      <span className="original-price">
+                        ${course.originalPrice.toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                </Flex>
+
                 <button
                   className={`enroll-btn ${isEnrolled ? 'enrolled' : ''}`}
                   onClick={handleEnroll}
@@ -310,14 +333,6 @@ const CourseDetail = () => {
           </aside>
         </div>
       </div>
-
-      {/* Video Preview Modal */}
-      <CoursePreviewModal
-        open={!!previewVideo}
-        onClose={() => setPreviewVideo(null)}
-        url={previewVideo}
-        title="Preview"
-      />
     </div>
   );
 };

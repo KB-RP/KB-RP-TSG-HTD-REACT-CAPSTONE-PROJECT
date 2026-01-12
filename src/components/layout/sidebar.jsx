@@ -1,29 +1,27 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  FiHome, 
-  FiBookOpen, 
-  FiAward, 
-  FiSettings, 
-  FiHelpCircle, 
+import {
+  FiHome,
+  FiBookOpen,
+  FiSettings,
   FiLogOut,
   FiChevronLeft,
   FiMenu
 } from 'react-icons/fi';
 import { useAuth } from '../../contexts';
+import { Popconfirm } from 'antd';
 
 const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => {
   const location = useLocation();
-  const { logout , user } = useAuth();
+  const { logout, user } = useAuth();
+
   const navItems = [
     { icon: <FiHome />, label: 'Dashboard', path: '/dashboard' },
     { icon: <FiBookOpen />, label: 'My Courses', path: '/dashboard/my-course' },
-    // { icon: <FiAward />, label: 'Achievements', path: '/dashboard/achievements' },
-    ...(user?.role === 'admin' 
+    ...(user?.role === 'admin'
       ? [{ icon: <FiSettings />, label: 'Settings', path: '/dashboard/admin-settings' }]
       : []
     ),
-    // { icon: <FiHelpCircle />, label: 'Help', path: '/help' },
   ];
 
   const handleNavClick = () => {
@@ -35,13 +33,13 @@ const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => 
   return (
     <>
       {isMobile && (
-        <div 
-          className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--active' : ''}`} 
+        <div
+          className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--active' : ''}`}
           onClick={onClose}
         />
       )}
-      
-      <aside 
+
+      <aside
         className={`
           sidebar 
           ${isMobile ? (isOpen ? 'sidebar--open' : '') : ''} 
@@ -50,8 +48,8 @@ const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => 
       >
         <div className="sidebar__header">
           {!collapsed && <h2>Menu</h2>}
-          <button 
-            className="sidebar__toggle" 
+          <button
+            className="sidebar__toggle"
             onClick={onToggleCollapse}
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
             title={collapsed ? 'Expand' : 'Collapse'}
@@ -59,16 +57,15 @@ const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => 
             {collapsed ? <FiMenu /> : <FiChevronLeft />}
           </button>
         </div>
-        
+
         <nav className="sidebar__nav">
           <ul className="nav-menu">
             {navItems.map((item, index) => (
               <li key={index} className="nav-menu__item">
                 <Link
                   to={item.path}
-                  className={`nav-menu__link ${
-                    location.pathname === item.path ? 'nav-menu__link--active' : ''
-                  }`}
+                  className={`nav-menu__link ${location.pathname === item.path ? 'nav-menu__link--active' : ''
+                    }`}
                   onClick={handleNavClick}
                   title={collapsed ? item.label : ''}
                 >
@@ -81,14 +78,21 @@ const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) => 
         </nav>
 
         <div className="sidebar__footer">
-          <button 
-            className="logout-button" 
-            onClick={()=>logout()}
-            title={collapsed ? 'Logout' : ''}
+          <Popconfirm
+            title="Are you sure you want to logout?"
+            okText="Yes"
+            cancelText="No"
+            placement="right"
+            onConfirm={logout}
           >
-            <FiLogOut className="logout-button__icon" />
-            {!collapsed && <span>Logout</span>}
-          </button>
+            <button
+              className="logout-button"
+              title={collapsed ? 'Logout' : ''}
+            >
+              <FiLogOut className="logout-button__icon" />
+              {!collapsed && <span>Logout</span>}
+            </button>
+          </Popconfirm>
         </div>
       </aside>
     </>

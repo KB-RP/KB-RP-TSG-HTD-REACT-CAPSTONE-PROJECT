@@ -382,7 +382,7 @@ const CourseForm = ({ initialValues, onFinish, loading, isEdit = false, form }) 
           </Card>
 
           <Button
-            type="primary"
+            type="default"
             htmlType="submit"
             loading={loading}
             block

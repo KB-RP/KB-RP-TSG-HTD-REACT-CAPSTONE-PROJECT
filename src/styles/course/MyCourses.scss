@@ -1,11 +1,12 @@
 @import '../../styles/dashboard/_variables.scss';
 
 .my-courses {
-//   padding: 2rem;
+  //   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
 
-  &.loading, &.empty {
+  &.loading,
+  &.empty {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,7 +46,7 @@
 
 .page-header {
   margin-bottom: 2rem;
-  
+
   h1 {
     font-size: 2rem;
     color: $text;
@@ -165,6 +166,14 @@
       }
     }
 
+    .course-title.ellipsis {
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+
     .course-actions {
       margin-top: 1.25rem;
       padding-top: 1rem;
@@ -192,6 +201,11 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

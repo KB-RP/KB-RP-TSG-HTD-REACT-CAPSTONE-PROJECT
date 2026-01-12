@@ -3,7 +3,6 @@ import { Table, Space, Button, Input, Modal, message, Popconfirm, Tag, Tooltip, 
 import { EditOutlined, DeleteOutlined, SearchOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { courseAPI } from '../../../utils/api/courseApi';
-import CourseForm from '../../../components/course/CourseForm';
 import EditCourseModal from '../../../modal/editCourse';
 
 const { Search } = Input;
@@ -19,12 +18,11 @@ const ManageCourses = () => {
     setLoading(true);
     try {
       const res = await courseAPI.getCourses();
-      // Transform the data to match our table structure
       const formattedCourses = res.map(course => ({
         ...course,
         key: course.id,
         totalLessons: course.modules.reduce((total, module) => total + (module.lessons?.length || 0), 0),
-        totalDuration: course.duration // Assuming duration is in hours
+        totalDuration: course.duration
       }));
       setCourses(formattedCourses);
     } catch (error) {
@@ -50,7 +48,6 @@ const ManageCourses = () => {
 
   const handleDelete = async (courseId) => {
     try {
-      // TODO: Replace with actual API call
       await courseAPI.deleteCourse(courseId);
       setCourses(courses.filter(course => course.id !== courseId));
       message.success('Course deleted successfully');
@@ -88,35 +85,23 @@ const ManageCourses = () => {
           </div>
         </Tooltip>
       ),
-      sorter: (a, b) => a.title.localeCompare(b.title),
     },
     {
       title: 'Category',
       dataIndex: 'category',
       key: 'category',
-      filters: [
-        { text: 'Web Development', value: 'Web Development' },
-        { text: 'JavaScript', value: 'JavaScript' },
-        { text: 'UI/UX Design', value: 'UI/UX Design' },
-        { text: 'Data Science', value: 'Data Science' },
-        { text: 'DevOps', value: 'DevOps' },
-      ],
-      onFilter: (value, record) => record?.category === value,
-      render: (category) => <Tag color="blue">{category}</Tag>,
     },
     {
       title: 'Rating',
       dataIndex: 'rating',
       key: 'rating',
       render: (rating) => `${rating}/5.0`,
-      sorter: (a, b) => a?.rating - b?.rating,
     },
     {
       title: 'Students',
       dataIndex: 'students',
       key: 'students',
       render: (students) => students?.toLocaleString(),
-      sorter: (a, b) => a?.students - b?.students,
     },
     {
       title: 'Price',
@@ -132,7 +117,6 @@ const ManageCourses = () => {
           )}
         </div>
       ),
-      sorter: (a, b) => a.price - b.price,
     },
     {
       title: 'Details',
@@ -218,7 +202,7 @@ const ManageCourses = () => {
         style={{ width: '100%' }}
         bordered
       />
-        <EditCourseModal editingCourse ={editingCourse} editFormVisible ={editFormVisible} setEditFormVisible={setEditFormVisible} fetchCourses={fetchCourses} loading={loading} setLoading={setLoading}/>
+      <EditCourseModal editingCourse={editingCourse} editFormVisible={editFormVisible} setEditFormVisible={setEditFormVisible} fetchCourses={fetchCourses} loading={loading} setLoading={setLoading} />
     </div>
   );
 };

@@ -3,7 +3,8 @@ import { courseAPI } from '../../utils/api/courseApi';
 import { useAuth } from '../../contexts';
 import { Link } from 'react-router-dom';
 import { FiClock, FiUsers, FiStar, FiPlay } from 'react-icons/fi';
-import './MyCourses.scss';
+import '../../styles/course/MyCourses.scss';
+import { Tooltip } from 'antd';
 
 const MyCourses = () => {
     const { user } = useAuth();
@@ -64,43 +65,40 @@ const MyCourses = () => {
             </div>
 
             <div className="courses-grid">
-                {enrolledCourses.map(({ course, progress = 0 }) => (
+                {enrolledCourses?.map(({ course, progress = 0 }) => (
                     <div key={course.id} className="course-card">
                         <div className="course-thumbnail">
-                            <img src={course.thumbnail} alt={course.title} />
-                            {/* <div className="progress-bar">
-                                <div
-                                    className="progress-fill"
-                                    style={{ width: `${progress}%` }}
-                                ></div>
-                            </div> */}
-                            {/* <span className="progress-text">{Math.round(progress)}% complete</span> */}
+                            <img src={course?.thumbnail} alt={course?.title} />
                         </div>
 
                         <div className="course-content">
-                            <div className="course-category">{course.category}</div>
-                            <h3 className="course-title">
-                                <Link to={`/courses/${course.id}`}>{course.title}</Link>
-                            </h3>
+                            <div className="course-category">{course?.category}</div>
+                            <Tooltip title={course?.title}>
+                                <h3 className="course-title ellipsis">
+                                    <Link to={`/courses/${course?.id}`}>
+                                        {course?.title}
+                                    </Link>
+                                </h3>
+                            </Tooltip>
 
                             <div className="course-meta">
                                 <span className="meta-item">
                                     <FiStar className="meta-icon" />
-                                    {course.rating} ({course.students.toLocaleString()})
+                                    {course?.rating} ({course?.students?.toLocaleString()})
                                 </span>
                                 <span className="meta-item">
                                     <FiUsers className="meta-icon" />
-                                    {course.students.toLocaleString()} students
+                                    {course?.students?.toLocaleString()} students
                                 </span>
                                 <span className="meta-item">
                                     <FiClock className="meta-icon" />
-                                    {formatDuration(course.duration)}
+                                    {formatDuration(course?.duration)}
                                 </span>
                             </div>
 
                             <div className="course-actions">
                                 <Link
-                                    to={`/courses/${course.id}?tab=overview`}
+                                    to={`/courses/${course?.id}?tab=overview`}
                                     className="continue-btn"
                                 >
                                     <FiPlay /> {progress > 0 ? 'Continue' : 'Start Learning'}
