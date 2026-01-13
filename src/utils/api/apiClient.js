@@ -3,6 +3,12 @@ import axios from 'axios';
 // Get base URL from environment variable with fallback
 const API_URL = 'http://localhost:8000';
 
+export const redirectToSignIn = () => {
+  if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') return;
+  if (typeof window === 'undefined') return;
+  window.location.assign('/signIn');
+};
+
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
@@ -31,7 +37,7 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // Handle unauthorized access (e.g., redirect to login)
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      redirectToSignIn();
     }
     return Promise.reject(error);
   }

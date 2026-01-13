@@ -25,7 +25,6 @@ export const courseAPI = {
             throw error.response?.data || error.message;
         }
     },
-
     getCourseById: async (id) => {
         try {
             const response = await apiClient.get(`${COURSES.getCourse}/${id}`);
