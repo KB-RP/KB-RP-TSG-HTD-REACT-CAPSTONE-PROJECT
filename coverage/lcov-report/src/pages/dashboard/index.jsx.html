@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -236,9 +236,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -273,7 +273,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -288,7 +288,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,7 +303,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -319,7 +319,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -352,7 +352,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -382,7 +382,7 @@ import { Empty } from 'antd';
 import { useDashboardCourses } from './useDashboardCourses';
 &nbsp;
 &nbsp;
-const DashboardHome = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
+const DashboardHome = () =&gt; {
   const {
     search,
     setSearch,
@@ -391,9 +391,9 @@ const DashboardHome = <span class="fstat-no" title="function not covered" >()</s
     setFilters,
     resetFilters,
     filteredCourses,
-  } = <span class="cstat-no" title="statement not covered" >useDashboardCourses();</span>
+  } = useDashboardCourses();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div className="dashboard-home"&gt;
       &lt;div className="dashboard-header"&gt;
         &lt;div className="dashboard-header__content"&gt;
@@ -428,7 +428,7 @@ const DashboardHome = <span class="fstat-no" title="function not covered" >()</s
                   &lt;Col xs={12} sm={6} md={6} lg={6}&gt;
                     &lt;Select
                       value={filters.students}
-                      onChange={<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >setFilters(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...f, students: v })</span>)}</span>
+                      onChange={(v) =&gt; setFilters((f) =&gt; ({ ...f, students: v }))}
                       style={{ width: '100%' }}
                       className="filter-select"
                       options={[
@@ -443,7 +443,7 @@ const DashboardHome = <span class="fstat-no" title="function not covered" >()</s
                   &lt;Col xs={12} sm={6} md={6} lg={6}&gt;
                     &lt;Select
                       value={filters.duration}
-                      onChange={<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >setFilters(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...f, duration: v })</span>)}</span>
+                      onChange={(v) =&gt; setFilters((f) =&gt; ({ ...f, duration: v }))}
                       style={{ width: '100%' }}
                       className="filter-select"
                       options={[
@@ -458,7 +458,7 @@ const DashboardHome = <span class="fstat-no" title="function not covered" >()</s
                   &lt;Col xs={12} sm={6} md={6} lg={6}&gt;
                     &lt;Select
                       value={filters.price}
-                      onChange={<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >setFilters(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...f, price: v })</span>)}</span>
+                      onChange={(v) =&gt; setFilters((f) =&gt; ({ ...f, price: v }))}
                       style={{ width: '100%' }}
                       className="filter-select"
                       options={[
@@ -474,7 +474,7 @@ const DashboardHome = <span class="fstat-no" title="function not covered" >()</s
                   &lt;Col xs={12} sm={6} md={6} lg={6}&gt;
                     &lt;Select
                       value={filters.rating}
-                      onChange={<span class="fstat-no" title="function not covered" >(v</span>) =&gt; <span class="cstat-no" title="statement not covered" >setFilters(<span class="fstat-no" title="function not covered" >(f</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...f, rating: v })</span>)}</span>
+                      onChange={(v) =&gt; setFilters((f) =&gt; ({ ...f, rating: v }))}
                       style={{ width: '100%' }}
                       className="filter-select"
                       options={[
@@ -506,8 +506,8 @@ const DashboardHome = <span class="fstat-no" title="function not covered" >()</s
       &lt;div className="courses-section"&gt;
         &lt;div className="courses-grid"&gt;
           {filteredCourses &amp;&amp; filteredCourses.length &gt; 0 ? (
-            filteredCourses.map(<span class="fstat-no" title="function not covered" >(c</span>ourse) =&gt; (
-<span class="cstat-no" title="statement not covered" >              &lt;CourseCard key={course.id} {...course} /&gt;</span>
+            filteredCourses.map((course) =&gt; (
+              &lt;CourseCard key={course.id} {...course} /&gt;
             ))
           ) : (
             &lt;Flex
@@ -535,7 +535,7 @@ export default DashboardHome;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T06:59:07.068Z
+                at 2026-01-13T16:13:45.378Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,8 +1,6 @@
+// import '../../styles/auth/main.scss';
 import { FormInput } from '../../components/formInput';
-import { useAuth } from '../../contexts';
-import '../../styles/auth/main.scss';
 import useSignIn from './useSignIn';
-
 
 const SignIn = () => {
   const {

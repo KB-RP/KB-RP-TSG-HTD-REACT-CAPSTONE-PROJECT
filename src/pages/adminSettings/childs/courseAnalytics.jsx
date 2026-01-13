@@ -84,7 +84,9 @@ const CourseAnalytics = () => {
       message.warning(`You can select maximum ${MAX_SELECTION} courses`);
       return;
     }
-    setSelectedIds(vals);
+    else {
+      setSelectedIds(vals);
+    }
   };
 
   const handleView = () => {
@@ -96,21 +98,29 @@ const CourseAnalytics = () => {
   };
 
   const downloadPng = async () => {
-    if (!chartRef.current) return;
+    if (chartRef.current) {
+      try {
+        const dataUrl = await htmlToImage.toPng(chartRef.current, {
+          backgroundColor: '#ffffff',
+          pixelRatio: 2,
+        });
 
-    try {
-      const dataUrl = await htmlToImage.toPng(chartRef.current, {
-        backgroundColor: '#ffffff',
-        pixelRatio: 2
-      });
-      const link = document.createElement('a');
-      link.download = 'course-analytics.png';
-      link.href = dataUrl;
-      link.click();
-    } catch {
-      message.error('Failed to export PNG');
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = 'course-analytics.png';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error('PNG export failed:', error);
+        message.error('Failed to export PNG');
+      }
+    } else {
+      message.error('Chart is not available for export');
     }
   };
+
 
   return (
     <Card title="Course Analytics" loading={loading}>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -154,24 +154,24 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,25 +233,25 @@ import CourseAnalytics from './childs/courseAnalytics';
 import   '../../styles/adminSettings/adminSettings.scss';
 const { TabPane } = Tabs;
 &nbsp;
-const AdminSettings = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-  const location = <span class="cstat-no" title="statement not covered" >useLocation();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
-  const [activeTab, setActiveTab] = <span class="cstat-no" title="statement not covered" >useState('1');</span> // Default to first tab
+const AdminSettings = () =&gt; {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('1'); // Default to first tab
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-    const searchParams = <span class="cstat-no" title="statement not covered" >new URLSearchParams(location.search);</span>
-    const tab = <span class="cstat-no" title="statement not covered" >searchParams.get('tab');</span>
-<span class="cstat-no" title="statement not covered" >    if (tab &amp;&amp; ['1', '2' , '3'].includes(tab)) {</span>
-<span class="cstat-no" title="statement not covered" >      setActiveTab(tab);</span>
+  useEffect(() =&gt; {
+    const searchParams = new URLSearchParams(location.search);
+    const tab = searchParams.get('tab');
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (tab &amp;&amp; ['1', '2' , '3'].includes(tab)) {
+      setActiveTab(tab);
     }
   }, [location.search]);
 &nbsp;
-  const handleTabChange = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(k</span>ey) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    setActiveTab(key);</span>
-<span class="cstat-no" title="statement not covered" >    navigate(`?tab=${key}`, { replace: true });</span>
+  const handleTabChange = (key) =&gt; {
+    setActiveTab(key);
+    navigate(`?tab=${key}`, { replace: true });
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;div className="admin-settings"&gt;
       &lt;div className="admin-header"&gt;
         &lt;h2&gt;Admin Settings&lt;/h2&gt;
@@ -310,7 +310,7 @@ export default AdminSettings;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T06:59:07.068Z
+                at 2026-01-13T16:13:45.378Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

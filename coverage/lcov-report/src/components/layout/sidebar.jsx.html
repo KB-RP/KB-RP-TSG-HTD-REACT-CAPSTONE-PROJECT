@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>20/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -178,27 +178,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,7 +225,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">16x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -278,11 +278,11 @@ import {
 import { useAuth } from '../../contexts';
 import { Popconfirm } from 'antd';
 &nbsp;
-const Sidebar = <span class="fstat-no" title="function not covered" >({</span> isOpen, onClose, isMobile, collapsed, onToggleCollapse }) =&gt; {
-  const location = <span class="cstat-no" title="statement not covered" >useLocation();</span>
-  const { logout, user } = <span class="cstat-no" title="statement not covered" >useAuth();</span>
+const Sidebar = ({ isOpen, onClose, isMobile, collapsed, onToggleCollapse }) =&gt; {
+  const location = useLocation();
+  const { logout, user } = useAuth();
 &nbsp;
-  const navItems = <span class="cstat-no" title="statement not covered" >[</span>
+  const navItems = [
     { icon: &lt;FiHome /&gt;, label: 'Dashboard', path: '/dashboard' },
     { icon: &lt;FiBookOpen /&gt;, label: 'My Courses', path: '/dashboard/my-course' },
     ...(user?.role === 'admin'
@@ -291,17 +291,17 @@ const Sidebar = <span class="fstat-no" title="function not covered" >({</span> i
     ),
   ];
 &nbsp;
-  const handleNavClick = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >()</span> =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (isMobile) {</span>
-<span class="cstat-no" title="statement not covered" >      onClose();</span>
+  const handleNavClick = () =&gt; {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (isMobile) {
+      onClose();
     }
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;&gt;
       {isMobile &amp;&amp; (
         &lt;div
-          className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--active' : ''}`}
+          className={`sidebar-overlay ${isOpen ? 'sidebar-overlay--active' : <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>`}
           onClick={onClose}
         /&gt;
       )}
@@ -309,8 +309,8 @@ const Sidebar = <span class="fstat-no" title="function not covered" >({</span> i
       &lt;aside
         className={`
           sidebar 
-          ${isMobile ? (isOpen ? 'sidebar--open' : '') : ''} 
-          ${collapsed ? 'sidebar--collapsed' : ''}
+          ${isMobile ? (isOpen ? 'sidebar--open' : <span class="branch-1 cbranch-no" title="branch not covered" >'')</span> : <span class="branch-1 cbranch-no" title="branch not covered" >''} </span>
+          ${collapsed ? <span class="branch-0 cbranch-no" title="branch not covered" >'sidebar--collapsed' </span>: ''}
         `}
       &gt;
         &lt;div className="sidebar__header"&gt;
@@ -318,23 +318,23 @@ const Sidebar = <span class="fstat-no" title="function not covered" >({</span> i
           &lt;button
             className="sidebar__toggle"
             onClick={onToggleCollapse}
-            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            title={collapsed ? 'Expand' : 'Collapse'}
+            aria-label={collapsed ? <span class="branch-0 cbranch-no" title="branch not covered" >'Expand sidebar' </span>: 'Collapse sidebar'}
+            title={collapsed ? <span class="branch-0 cbranch-no" title="branch not covered" >'Expand' </span>: 'Collapse'}
           &gt;
-            {collapsed ? &lt;FiMenu /&gt; : &lt;FiChevronLeft /&gt;}
+            {collapsed ? <span class="branch-0 cbranch-no" title="branch not covered" >&lt;FiMenu /&gt; </span>: &lt;FiChevronLeft /&gt;}
           &lt;/button&gt;
         &lt;/div&gt;
 &nbsp;
         &lt;nav className="sidebar__nav"&gt;
           &lt;ul className="nav-menu"&gt;
-            {navItems.map(<span class="fstat-no" title="function not covered" >(i</span>tem, index) =&gt; (
-<span class="cstat-no" title="statement not covered" >              &lt;li key={index} className="nav-menu__item"&gt;</span>
+            {navItems.map((item, index) =&gt; (
+              &lt;li key={index} className="nav-menu__item"&gt;
                 &lt;Link
                   to={item.path}
                   className={`nav-menu__link ${location.pathname === item.path ? 'nav-menu__link--active' : ''
                     }`}
                   onClick={handleNavClick}
-                  title={collapsed ? item.label : ''}
+                  title={collapsed ? <span class="branch-0 cbranch-no" title="branch not covered" >item.label </span>: ''}
                 &gt;
                   &lt;span className="nav-menu__icon"&gt;{item.icon}&lt;/span&gt;
                   &lt;span className="nav-menu__label"&gt;{item.label}&lt;/span&gt;
@@ -354,7 +354,7 @@ const Sidebar = <span class="fstat-no" title="function not covered" >({</span> i
           &gt;
             &lt;button
               className="logout-button"
-              title={collapsed ? 'Logout' : ''}
+              title={collapsed ? <span class="branch-0 cbranch-no" title="branch not covered" >'Logout' </span>: ''}
             &gt;
               &lt;FiLogOut className="logout-button__icon" /&gt;
               {!collapsed &amp;&amp; &lt;span&gt;Logout&lt;/span&gt;}
@@ -373,7 +373,7 @@ export default Sidebar;</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-01-13T06:59:07.068Z
+                at 2026-01-13T16:13:45.378Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

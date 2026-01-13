@@ -65,20 +65,10 @@ const CourseDetail = () => {
   }, [id]);
 
   const handleEnroll = async () => {
-    // if (!isAuthenticated) {
-    //   navigate('/signin', { state: { from: `/courses/${id}` } });
-    //   return;
-    // }
-    // Implement enrollment logic
     const res = await courseAPI.enrollInCourse({ userId: user?.id, courseId: id });
     setIsEnrolled(true);
   };
 
-  const handlePreviewClick = (lesson) => {
-    if (lesson.videoLink) {
-      setPreviewVideo(lesson.videoLink);
-    }
-  };
 
   if (loading) {
     return <div className="course-loading">Loading course details...</div>;
@@ -183,7 +173,6 @@ const CourseDetail = () => {
                             <div
                               key={lIdx}
                               className="preview-lesson"
-                              onClick={() => handlePreviewClick(lesson)}
                               style={{ cursor: 'pointer' }}
                             >
                               <FaPlay className="play-icon" />

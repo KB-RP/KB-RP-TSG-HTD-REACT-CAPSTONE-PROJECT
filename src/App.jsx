@@ -1,23 +1,29 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts';
-import SignIn from './pages/signIn';
-import SignUp from './pages/signUp';
-import DashboardHome from './pages/dashboard';
-import MyCourses from './pages/myCourses';
-import AdminSettings from './pages/adminSettings';
 import { AdminRoute } from './components/common/adminRoute';
-import Layout from './pages/layout';
-import CourseDetail from './pages/CourseDetail';
-import 'antd/dist/antd.css';
 
+// 1. Lazy load your page components
+const SignIn = lazy(() => import('./pages/signIn'));
+const SignUp = lazy(() => import('./pages/signUp'));
+const DashboardHome = lazy(() => import('./pages/dashboard'));
+const MyCourses = lazy(() => import('./pages/myCourses'));
+const AdminSettings = lazy(() => import('./pages/adminSettings'));
+const Layout = lazy(() => import('./pages/layout'));
+const CourseDetail = lazy(() => import('./pages/CourseDetail'));
+
+// Simple Loading Spinner for Suspense fallback
+const LoadingFallback = () => (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    Loading...
+  </div>
+);
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
-  }
+  if (loading) return <LoadingFallback />;
 
   if (!isAuthenticated) {
     return <Navigate to="/signin" replace />;
@@ -41,36 +47,39 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/" element={<Navigate to="/signin" replace />} />
+        {/* 2. Wrap Routes in Suspense to handle the loading state */}
+        <Suspense fallback={<LoadingFallback />}>
+          <Routes>
+            <Route path="/" element={<Navigate to="/signin" replace />} />
 
-          {/* Public Routes */}
-          <Route element={<PublicRoute />}>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Route>
-
-          {/* Protected Routes */}
-          <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Layout/>}>
-              <Route index element={<DashboardHome />} />
-              <Route path="my-course" element={<MyCourses />} />
-              <Route
-                path="admin-settings"
-                element={
-                  <AdminRoute>
-                    <AdminSettings />
-                  </AdminRoute>
-                }
-              />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
+            {/* Public Routes */}
+            <Route element={<PublicRoute />}>
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
             </Route>
-            <Route path="/courses/:id" element={<CourseDetail />} />
-          </Route>
 
-          {/* 404 Route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/dashboard" element={<Layout />}>
+                <Route index element={<DashboardHome />} />
+                <Route path="my-course" element={<MyCourses />} />
+                <Route
+                  path="admin-settings"
+                  element={
+                    <AdminRoute>
+                      <AdminSettings />
+                    </AdminRoute>
+                  }
+                />
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Route>
+              <Route path="/courses/:id" element={<CourseDetail />} />
+            </Route>
+
+            {/* 404 Route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </Router>
     </AuthProvider>
   );

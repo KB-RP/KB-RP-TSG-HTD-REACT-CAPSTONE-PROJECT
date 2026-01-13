@@ -1,8 +1,4 @@
-// src/pages/SignUp.jsx
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FormInput } from '../../components/formInput';
-import '../../styles/auth/main.scss';
 import useSignUp from './useSignUp';
 
 const SignUp = () => {

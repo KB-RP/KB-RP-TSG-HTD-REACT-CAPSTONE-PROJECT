@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import {Outlet } from 'react-router-dom';
 import Navbar from '../components/layout/navbar';
-import '../styles/dashboard/main.scss';
+// import '../styles/dashboard/main.scss';
 import Sidebar from '../components/layout/Sidebar';
 
 const Layout = () => {
