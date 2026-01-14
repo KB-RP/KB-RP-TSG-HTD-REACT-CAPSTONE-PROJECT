@@ -48,7 +48,7 @@ A comprehensive Learning Management System built with React (frontend) and JSON 
 - **React 19.2.0** - UI library
 - **Vite** - Build tool and dev server
 - **React Router DOM** - Client-side routing
-- **Redux Toolkit** - State management
+- **Context API** - State management
 - **Ant Design** - UI component library
 - **Axios** - HTTP client
 - **SASS** - CSS preprocessor
@@ -128,7 +128,7 @@ The application comes with pre-configured users:
   - Email: `kaushikbhowmick@rightpoint.com`
   - Password: `123456`
 - **Student**:
-  - Email: `testuser@emaple.com`
+  - Email: `testuser@example.com`
   - Password: `123456`
 
 ## API Documentation
@@ -294,10 +294,6 @@ npm run test:coverage
 - Update documentation as needed
 - Ensure all tests pass before submitting PR
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ---
 
-**Note**: This is a capstone project demonstrating full-stack development skills with modern React and REST API integration. 
+**Note**: This is a capstone project demonstrating frontend development skills with modern React and REST API integration. 

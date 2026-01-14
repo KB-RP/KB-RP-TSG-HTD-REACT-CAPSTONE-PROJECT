@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts";
+import { message } from "antd";
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/;
 
@@ -59,9 +60,12 @@ const useSignIn = () => {
       setIsLoading(true);
 
       try {
-        await login(formData);
+       const res = await login(formData);
+       if(res){
+        message.success("Login successful!");
+       }
       } catch (error) {
-        console.error("Login error:", error);
+        message.error("Invalid email or password.");
         setSubmitError(
           error?.message || "Login failed. Please try again."
         );

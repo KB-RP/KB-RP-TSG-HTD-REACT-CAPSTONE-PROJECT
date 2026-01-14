@@ -17,3 +17,57 @@
   grid-column: 1 / -1;
   min-height: 300px;
 }
+
+
+
+
+.filters-box {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Select input */
+.filter-select {
+  width: 100%;
+
+  .ant-select-selector {
+    height: 42px !important;
+    border-radius: 10px !important;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+  }
+}
+
+/* Dropdown menu */
+.ant-select-dropdown {
+  border-radius: 12px !important;
+  padding: 6px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Dropdown options */
+.ant-select-item {
+  border-radius: 8px;
+  margin: 2px 0;
+  padding: 8px 12px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #f5f7fa;
+  }
+}
+
+/* Selected option */
+.ant-select-item-option-selected {
+  background-color: #e6f4ff !important;
+  font-weight: 500;
+}
+
+/* Clear button */
+.filters-box .ant-btn {
+  border-radius: 8px;
+  height: 38px;
+}

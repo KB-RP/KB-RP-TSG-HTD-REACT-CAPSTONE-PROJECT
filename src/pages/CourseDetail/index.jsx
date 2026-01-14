@@ -52,6 +52,10 @@ const CourseDetail = () => {
         setLoading(true);
         const res = await courseAPI.getCourseById(id);
         setCourse(res);
+        const isEnrolledRes = await courseAPI.getEnrolledCourse(user?.id);
+        console.log("isEnrolledRes" , isEnrolledRes)
+        const enrolled = isEnrolledRes?.some(c => c.courseId === id);
+        setIsEnrolled(enrolled);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching course:', err);

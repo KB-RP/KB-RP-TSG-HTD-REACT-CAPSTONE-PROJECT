@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { authAPI } from '../../utils/api/authAPI';
 
 const AuthContext = createContext(null);
@@ -6,72 +6,91 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const isAuthenticated = !!user;
-
-  const bootstrap = useCallback(async () => {
+  // Load auth state on app init
+  useEffect(() => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) {
-        setUser(null);
-        return;
+      const storedUser = localStorage.getItem('user');
+
+      if (token && storedUser) {
+        setUser(JSON.parse(storedUser));
       }
-
-      const profile = await authAPI.getProfile();
-      setUser(profile || null);
-    } catch (e) {
+    } catch (err) {
+      console.error('Auth initialization failed:', err);
       localStorage.removeItem('token');
-      setUser(null);
-    }
-  }, []);
-
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      if (!mounted) return;
-      setLoading(true);
-      await bootstrap();
-      if (!mounted) return;
-      setLoading(false);
-    })();
-
-    return () => {
-      mounted = false;
-    };
-  }, [bootstrap]);
-
-  const login = useCallback(async (credentials) => {
-    const result = await authAPI.login(credentials);
-    if (result?.user) setUser(result.user);
-    return result;
-  }, []);
-
-  const logout = useCallback(async () => {
-    try {
-      await authAPI.logout();
+      localStorage.removeItem('user');
     } finally {
-      localStorage.removeItem('token');
-      setUser(null);
+      setLoading(false);
     }
   }, []);
+
+  const login = async (credentials) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const { accessToken, user: loggedInUser } =
+        await authAPI.login(credentials);
+
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('user', JSON.stringify(loggedInUser));
+
+      setUser(loggedInUser);
+      return loggedInUser;
+    } catch (err) {
+      setError(err?.message || 'Login failed');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  };
+
+  const register = async (payload) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      return await authAPI.register(payload);
+    } catch (err) {
+      setError(err?.message || 'Registration failed');
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const value = useMemo(
     () => ({
       user,
       loading,
-      isAuthenticated,
+      error,
+      isAuthenticated: Boolean(user),
       login,
       logout,
-      setUser,
+      register,
     }),
-    [user, loading, isAuthenticated, login, logout]
+    [user, loading, error]
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
