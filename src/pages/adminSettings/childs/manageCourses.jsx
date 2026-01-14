@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Table, Space, Button, Input, Modal, message, Popconfirm, Tag, Tooltip, Typography } from 'antd';
 import { EditOutlined, DeleteOutlined, SearchOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
@@ -207,4 +207,4 @@ const ManageCourses = () => {
   );
 };
 
-export default ManageCourses;
+export default memo(ManageCourses);

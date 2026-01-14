@@ -1,4 +1,3 @@
-// src/pages/dashboard/Home.jsx
 import '../../styles/common/Common.scss';
 import CourseCard from '../../components/course/courseCard';
 import { AutoComplete, Input, Select, Row, Col, Space, Button, Flex } from 'antd';

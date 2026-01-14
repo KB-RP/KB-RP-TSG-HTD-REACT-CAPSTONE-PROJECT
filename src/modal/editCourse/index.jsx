@@ -1,5 +1,5 @@
 import { Form, message, Modal } from 'antd';
-import React from 'react'
+import React, { memo } from 'react'
 import CourseForm from '../../components/course/CourseForm';
 import { courseAPI } from '../../utils/api/courseApi';
 
@@ -22,7 +22,7 @@ const EditCourseModal = ({ editingCourse, editFormVisible, setEditFormVisible, f
               setLoading(true);
               await courseAPI.updateCourse(editingCourse.id, values);
               message.success('Course updated successfully!');
-              fetchCourses(); // Refresh the course list
+              fetchCourses();
               setEditFormVisible(false);
             } catch (error) {
               message.error('Failed to update course');
@@ -39,4 +39,4 @@ const EditCourseModal = ({ editingCourse, editFormVisible, setEditFormVisible, f
   )
 }
 
-export default EditCourseModal
+export default memo(EditCourseModal)

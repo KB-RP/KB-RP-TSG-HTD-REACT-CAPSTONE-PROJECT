@@ -1,5 +1,5 @@
 // src/components/course/CourseCard.jsx
-import React from 'react';
+import React, { memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CourseCard = ({
@@ -74,4 +74,4 @@ const CourseCard = ({
   );
 };
 
-export default CourseCard;
+export default memo(CourseCard);

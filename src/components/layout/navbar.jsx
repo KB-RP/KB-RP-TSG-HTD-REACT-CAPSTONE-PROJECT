@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { FiMenu, FiSearch, FiBell, FiUser } from 'react-icons/fi';
 
 const Navbar = ({ onMenuClick }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-
+  
   return (
     <header className="navbar">
       <div className="navbar__left">

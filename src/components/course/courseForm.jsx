@@ -1,5 +1,5 @@
 // src/pages/adminSettings/childs/CourseForm.jsx
-import React, { useEffect, useMemo } from 'react';
+import React, { memo, useEffect, useMemo } from 'react';
 import {
   Form,
   Input,
@@ -397,4 +397,4 @@ const CourseForm = ({ initialValues, onFinish, loading, isEdit = false, form }) 
   );
 };
 
-export default CourseForm;
+export default memo(CourseForm);
