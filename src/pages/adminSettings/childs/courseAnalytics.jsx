@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { memo, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Card,
   Select,
@@ -203,4 +203,4 @@ const CourseAnalytics = () => {
   );
 };
 
-export default CourseAnalytics;
+export default memo(CourseAnalytics);

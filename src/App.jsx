@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts';
 import { AdminRoute } from './components/common/adminRoute';
+import { Spin } from 'antd';
 
 // 1. Lazy load your page components
 const SignIn = lazy(() => import('./pages/signIn'));
@@ -13,11 +14,22 @@ const Layout = lazy(() => import('./pages/layout'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail'));
 
 // Simple Loading Spinner for Suspense fallback
+
 const LoadingFallback = () => (
-  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-    Loading...
+  <div
+      role="status"
+    aria-live="polite"
+    style={{
+      height: '100vh',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+    }}
+  >
+    <Spin size="large" tip="Loading content…" />
   </div>
 );
+
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {

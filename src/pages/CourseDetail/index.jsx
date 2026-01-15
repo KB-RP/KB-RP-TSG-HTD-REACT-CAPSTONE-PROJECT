@@ -5,7 +5,7 @@ import { courseAPI } from '../../utils/api/courseApi';
 import { FaPlay, FaClock, FaStar, FaUserGraduate, FaCertificate, FaMobileAlt, FaBookOpen } from 'react-icons/fa';
 import '../../styles/course/courseDetail.scss';
 
-import { Collapse, Tooltip , Flex } from 'antd';
+import { Collapse, Tooltip, Flex, message } from 'antd';
 const { Panel } = Collapse;
 import { useSearchParams } from 'react-router-dom';
 import { getYoutubeVideoId } from '../../utils/common/helper';
@@ -50,12 +50,21 @@ const CourseDetail = () => {
     const fetchCourse = async () => {
       try {
         setLoading(true);
+
         const res = await courseAPI.getCourseById(id);
         setCourse(res);
+
+        // ✅ Auto-load preview video on page load
+        const link = res?.vdoLink || res?.videoLink;
+        const videoId = getYoutubeVideoId(link);
+        if (videoId) {
+          setPreviewVideoId(videoId);
+        }
+
         const isEnrolledRes = await courseAPI.getEnrolledCourse(user?.id);
-        console.log("isEnrolledRes" , isEnrolledRes)
         const enrolled = isEnrolledRes?.some(c => c.courseId === id);
         setIsEnrolled(enrolled);
+
         setLoading(false);
       } catch (err) {
         console.error('Error fetching course:', err);
@@ -68,9 +77,17 @@ const CourseDetail = () => {
     }
   }, [id]);
 
+
   const handleEnroll = async () => {
     const res = await courseAPI.enrollInCourse({ userId: user?.id, courseId: id });
     setIsEnrolled(true);
+    message.success('Enrolled successfully!');
+    if (res) {
+      const res = await courseAPI.updateStudentCount(id, course.students + 1);
+      if (res) {
+        setCourse(prev => ({ ...prev, students: prev.students + 1 }));
+      }
+    }
   };
 
 
@@ -251,10 +268,6 @@ const CourseDetail = () => {
                       <div className="rating-count">Course Rating • {course.students?.toLocaleString()} students</div>
                     </div>
                   </div>
-                  <div className="reviews-list">
-                    {/* Reviews would be mapped here */}
-                    <p>No reviews yet. Be the first to review!</p>
-                  </div>
                 </div>
               )}
             </div>
@@ -264,28 +277,12 @@ const CourseDetail = () => {
           <aside className="course-sidebar">
             <div className="course-card">
               <div className="video-wrapper">
-                {previewVideoId ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${previewVideoId}?autoplay=1`}
-                    title="Course Preview"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  <>
-                    <Flex justify="center">
-                      <div className="course-card">
-                        <div className="video-wrapper">
-
-                          <button className="preview-btn" onClick={handleCoursePreview}>
-                            <FaPlay /> Preview this course
-                          </button>
-                        </div>
-                      </div>
-                    </Flex>
-
-                  </>
-                )}
+                <iframe
+                  src={`https://www.youtube.com/embed/${previewVideoId}?autoplay=1&mute=1`}
+                  title="Course Preview"
+                  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
               </div>
               <div className="pricing">
                 <Flex justify="center">

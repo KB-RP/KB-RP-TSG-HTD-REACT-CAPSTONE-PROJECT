@@ -89,6 +89,38 @@
     color: $text-light;
   }
 
+  &__button {
+    width: 100%;
+    padding: 0.875rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+
+    &--primary {
+      background: linear-gradient(135deg, $primary 0%, color.adjust($primary, $lightness: -5%) 100%);
+      color: $white;
+      box-shadow: 0 4px 12px rgba($primary, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba($primary, 0.4);
+      }
+
+      &:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+
   &__link {
     color: $primary;
     text-decoration: none;

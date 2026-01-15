@@ -13,7 +13,7 @@ A comprehensive Learning Management System built with React (frontend) and JSON 
 - [Project Structure](#project-structure)
 - [Testing](#testing)
 - [Contributing](#contributing)
-- [License](#license)
+
 
 ## Features
 

@@ -2,7 +2,6 @@ import apiClient from './apiClient';
 import { COURSES } from './apiEndpoints';
 
 export const courseAPI = {
-
     createCourse: async (courseData) => {
         const response = await apiClient.post(COURSES.createCourse, courseData);
         return response.data;
@@ -10,6 +9,17 @@ export const courseAPI = {
     updateCourse: async (id, courseData) => {
         const response = await apiClient.put(`${COURSES.createCourse}/${id}`, courseData);
         return response.data;
+    },
+    updateStudentCount: async (id, studentCount) => {
+        try {
+            const response = await apiClient.patch(
+                `${COURSES.createCourse}/${id}`,
+                { students: studentCount }
+            );
+            return response.data;
+        } catch (error) {
+            throw error.response?.data || error.message;
+        }
     },
     deleteCourse: async (id) => {
         const response = await apiClient.delete(`${COURSES.createCourse}/${id}`);
@@ -35,7 +45,6 @@ export const courseAPI = {
             throw error.response?.data || error.message;
         }
     },
-
     enrollInCourse: async (payload) => {
         try {
             const response = await apiClient.post(COURSES.enrollInCourse, payload);
@@ -46,7 +55,6 @@ export const courseAPI = {
             throw error.response?.data || error.message;
         }
     },
-
     getEnrolledCourse: async (id) => {
         try {
             const response = await apiClient.get(`${COURSES.enrollInCourse}?userId=${id}&_expand=course`);

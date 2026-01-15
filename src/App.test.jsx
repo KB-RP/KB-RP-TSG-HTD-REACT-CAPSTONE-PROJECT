@@ -54,7 +54,7 @@ describe('App routing & lazy loading', () => {
 
     renderAtRoute('/dashboard');
 
-    expect(screen.getByText(/loading/i)).toBeInTheDocument();
+    expect(screen.getByRole('status')).toBeInTheDocument();
   });
 
   test('redirects unauthenticated user to signin', async () => {
