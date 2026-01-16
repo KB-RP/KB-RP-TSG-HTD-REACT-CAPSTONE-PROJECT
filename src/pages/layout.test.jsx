@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import Layout from './layout';
+import { AuthProvider } from '../contexts';
 
 jest.mock('react-router-dom', () => {
   const actual = jest.requireActual('react-router-dom');
@@ -35,7 +36,15 @@ describe('Layout', () => {
   test('renders outlet and toggles sidebar open via navbar', async () => {
     const user = userEvent.setup();
 
-    render(<Layout />);
+    // provide a mock logged-in user to satisfy useAuth
+    const mockUser = { firstName: 'Alice' };
+    localStorage.setItem('user', JSON.stringify(mockUser));
+
+    render(
+      <AuthProvider>
+        <Layout />
+      </AuthProvider>
+    );
 
     expect(screen.getByTestId('outlet')).toBeInTheDocument();
 
@@ -45,5 +54,8 @@ describe('Layout', () => {
     await user.click(screen.getByText('menu'));
 
     expect(screen.getByTestId('sidebar')).toHaveAttribute('data-open', 'true');
+  });
+  afterEach(() => {
+    localStorage.removeItem('user');
   });
 });

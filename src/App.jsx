@@ -4,7 +4,6 @@ import { AuthProvider, useAuth } from './contexts';
 import { AdminRoute } from './components/common/adminRoute';
 import { Spin } from 'antd';
 
-// 1. Lazy load your page components
 const SignIn = lazy(() => import('./pages/signIn'));
 const SignUp = lazy(() => import('./pages/signUp'));
 const DashboardHome = lazy(() => import('./pages/dashboard'));
@@ -12,8 +11,6 @@ const MyCourses = lazy(() => import('./pages/myCourses'));
 const AdminSettings = lazy(() => import('./pages/adminSettings'));
 const Layout = lazy(() => import('./pages/layout'));
 const CourseDetail = lazy(() => import('./pages/CourseDetail'));
-
-// Simple Loading Spinner for Suspense fallback
 
 const LoadingFallback = () => (
   <div
@@ -29,7 +26,6 @@ const LoadingFallback = () => (
     <Spin size="large" tip="Loading content…" />
   </div>
 );
-
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {

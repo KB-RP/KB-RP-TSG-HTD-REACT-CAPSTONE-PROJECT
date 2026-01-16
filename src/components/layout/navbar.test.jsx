@@ -5,12 +5,12 @@ import userEvent from '@testing-library/user-event';
 import Navbar from './navbar';
 
 describe('Navbar', () => {
-  test('renders logo and notification badge', () => {
-    render(<Navbar onMenuClick={jest.fn()} />);
+  test('renders logo and avatar initial', () => {
+    render(<Navbar onMenuClick={jest.fn()} userName="alice" />);
 
     expect(screen.getByText('LMS')).toBeInTheDocument();
-    expect(screen.getByLabelText(/notifications/i)).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
+    expect(screen.queryByLabelText(/notifications/i)).toBeNull();
+    expect(screen.getByLabelText(/user-avatar/i)).toHaveTextContent('A');
   });
 
   test('calls onMenuClick when menu button is clicked', async () => {

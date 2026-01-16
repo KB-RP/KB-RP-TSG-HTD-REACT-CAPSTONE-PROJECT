@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import {Outlet } from 'react-router-dom';
 import Navbar from '../components/layout/navbar';
-// import '../styles/dashboard/main.scss';
 import Sidebar from '../components/layout/Sidebar';
+import { useAuth } from '../contexts';
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [collapsed, setCollapsed] = useState(false);
+  const { user } = useAuth();
+
 
   // Handle window resize for mobile detection
   useEffect(() => {
@@ -48,7 +50,7 @@ const Layout = () => {
 
   return (
     <div className="dashboard">
-      <Navbar onMenuClick={toggleSidebar} />
+      <Navbar onMenuClick={toggleSidebar} userName={user?.firstName}/>
       <div className="dashboard__container">
         <Sidebar
           isOpen={sidebarOpen}
